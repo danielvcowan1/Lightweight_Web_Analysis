@@ -1,0 +1,91 @@
+
+
+<!--
+Simple Keywords
+
+Michael Bigrigg
+-->
+
+<html>
+	<head>
+	<script type="text/javascript" src="pycat.js"></script>
+
+	<script type="text/javascript">
+	function displayResult()
+	{
+		var textinput
+
+		textinput = document.getElementById("myTextarea").value;
+
+		textclean = prepare(textinput);
+		textclean = lower(textclean);
+		textclean = removesymbols(textclean);
+		textclean = removenoise(textclean);
+		textclean = subcompound(textclean);
+
+		wordlist = textclean.split(" ");
+		wordlist.sort();
+
+		var i = 0;
+		var count = 1;
+		var old = "";
+		var sorted = [];
+
+		// create concept list from word list
+		for (i=0;i<wordlist.length;i++) {
+			if (wordlist[i].length>0) {
+				if (wordlist[i] != old) {
+					if ((old.length>0)
+						&& (old.charCodeAt(0) != 13)
+						&& (old != "")) {
+							sorted.push(count.toString()+" "+old);
+					}
+					count = 1;
+				}
+				else {
+					count = count + 1;
+				}
+				old = wordlist[i];
+			}
+			else {
+			}
+		}
+
+		sorted.sort();
+		sorted.reverse();
+
+		conceptlist = "<table>";
+		for(i=0;i<sorted.length;i++){
+			printable = sorted[i].split(" ");
+			conceptlist += "<tr><td>"
+						+printable[0]
+						+"</td><td>"
+						+printable[1]
+						+"</td><td>";
+		}
+		conceptlist += "</table>";
+		document.getElementById("concepts").innerHTML = conceptlist;
+}
+
+	</script>
+	</head>
+	<body>
+
+    <H2>SIMPLE KEYWORD TOOL</H2>
+	<table>
+	<tr><td>
+    	<P>Copy and paste your data into the text box<br/>
+    	and press <i>process text</i></P>
+    	<textarea id="myTextarea" rows="20" cols="40"></textarea>
+    	<br/>
+
+	    <button type="button"
+	    	onclick="displayResult()">process text
+    	</button>
+	</td><td style="vertical-align:top;">
+		<p id="concepts">
+	</td></tr>
+	</table>
+
+  </body>
+</html>
