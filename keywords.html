@@ -15,14 +15,25 @@ Michael Bigrigg
 	{
 		var textinput
 
+		// value that holds string input by user
 		textinput = document.getElementById("myTextarea").value;
 
+		/*
+		prepare() - Replaces all newline characters with " ".
+		lower() - Transforms all chracters to to lower case.
+		removesymbols() - Replaces all symbol characters (!, #, $, etc) with " ".
+		removenoise() - Replaces all words characterized as "noise words" all replaces them with " ". Examples are "the", "and", "or", etc.
+		subcompound() -
+		*/
 		textclean = prepare(textinput);
 		textclean = lower(textclean);
 		textclean = removesymbols(textclean);
-		textclean = removenoise(textclean);
+		if (document.getElementById("noiseWordsCheck").checked == true){
+				textclean = removenoise(textclean);
+		}
 		textclean = subcompound(textclean);
 
+		// Splits up every word into a list and sorts alphabetically
 		wordlist = textclean.split(" ");
 		wordlist.sort();
 
@@ -78,7 +89,7 @@ Michael Bigrigg
     	and press <i>process text</i></P>
     	<textarea id="myTextarea" rows="20" cols="40"></textarea>
     	<br/>
-
+			<input type="checkbox" id="noiseWordsCheck""> Noise Words <br/>
 	    <button type="button"
 	    	onclick="displayResult()">process text
     	</button>
