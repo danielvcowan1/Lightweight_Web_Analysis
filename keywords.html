@@ -14,6 +14,15 @@ Michael Bigrigg
 	function displayResult()
 	{
 		var textinput
+		var hashtagslist = [];
+		var mentionslist = [];
+		var phonenumberslist = [];
+		var urlslist = [];
+		var emails = [];
+		var ipaddresses = [];
+		var dates = [];
+		var times = [];
+		var currency = [];
 
 		// value that holds string input by user
 		textinput = document.getElementById("myTextarea").value;
@@ -23,12 +32,16 @@ Michael Bigrigg
 		lower() - Transforms all chracters to to lower case.
 		removesymbols() - Replaces all symbol characters (!, #, $, etc) with " ".
 		removenoise() - Replaces all words characterized as "noise words" all replaces them with " ". Examples are "the", "and", "or", etc.
-		subcompound() -
-		*/
+		subcompound() - combines first and aid to create first_aid. Possibly add more possibilities??
+    */
+
 		textclean = prepare(textinput);
 		textclean = lower(textclean);
+
+		wordlistsymbols = textclean.split(" "); //a wordlist still containing symbols for data list option
+
 		textclean = removesymbols(textclean);
-		if (document.getElementById("noiseWordsCheck").checked == true){
+		if (document.getElementById("noiseWordsCheck").checked == true){ // ensures check box is checked
 				textclean = removenoise(textclean);
 		}
 		textclean = subcompound(textclean);
@@ -41,7 +54,6 @@ Michael Bigrigg
 		var count = 1;
 		var old = "";
 		var sorted = [];
-
 		// create concept list from word list
 		for (i=0;i<wordlist.length;i++) {
 			if (wordlist[i].length>0) {
@@ -76,6 +88,30 @@ Michael Bigrigg
 		}
 		conceptlist += "</table>";
 		document.getElementById("concepts").innerHTML = conceptlist;
+
+
+		/* DATA LISTS
+
+			 The following code will first check to ensure that the user has checked the box for data lists.
+			 A function getDataLists() in pycat.js is called to generate the different lists and they are placed in an array of lists called datalists.
+			 Lastly, the function createDataListDisplay() is called for each entry in the datalists array to display to the user.
+
+		*/
+
+		if (document.getElementById("dataListsCheck").checked == true){
+			var datalists = [];
+			datalists = getDataLists(wordlistsymbols);
+
+			document.getElementById("hashtags").innerHTML = createDataListDisplay(datalists[0], "Hashtags: ");
+			document.getElementById("mentions").innerHTML = createDataListDisplay(datalists[1], "Mentions: ");
+			document.getElementById("phonenumbers").innerHTML = createDataListDisplay(datalists[2], "Phone Numbers: ");
+			document.getElementById("urls").innerHTML = createDataListDisplay(datalists[3], "URLs: ");
+			document.getElementById("emails").innerHTML = createDataListDisplay(datalists[4], "E-mails: ");
+			document.getElementById("ipaddresses").innerHTML = createDataListDisplay(datalists[5], "IP Addresses: ");
+			document.getElementById("dates").innerHTML = createDataListDisplay(datalists[6], "Dates: ");
+			document.getElementById("times").innerHTML = createDataListDisplay(datalists[7], "Times: ");
+			document.getElementById("currency").innerHTML = createDataListDisplay(datalists[8], "Currency: ");
+		}
 }
 
 	</script>
@@ -89,14 +125,24 @@ Michael Bigrigg
     	and press <i>process text</i></P>
     	<textarea id="myTextarea" rows="20" cols="40"></textarea>
     	<br/>
-			<input type="checkbox" id="noiseWordsCheck""> Noise Words <br/>
+			<input type="checkbox" id="noiseWordsCheck"> Noise Words <br/>
+			<input type="checkbox" id="dataListsCheck"> Data Lists <br/>
 	    <button type="button"
 	    	onclick="displayResult()">process text
     	</button>
 	</td><td style="vertical-align:top;">
 		<p id="concepts">
+	</td><td style="vertical-align:top;">
+		<p id="hashtags">
+		<p id="mentions">
+		<p id="phonenumbers">
+		<p id="urls">
+		<p id="emails">
+		<p id="ipaddresses">
+		<p id="dates">
+		<p id="times">
+		<p id="currency">
 	</td></tr>
 	</table>
-
   </body>
 </html>
