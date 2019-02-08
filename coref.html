@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+
+</head>
+<body>
+	<H2>SIMPLE COREFERENCE TOOL</H2>
+	<table>
+	<tr><td>
+    	<P>Copy and paste your data into the text box<br/>
+    	and press <i>process text</i></P>
+    	<textarea id="myTextarea" rows="20" cols="40"></textarea>
+    	<br/>
+			<input type="checkbox" id="noiseWordsCheck"> Remove Noise Words <br/>
+			<input type="checkbox" id="dataListsCheck"> Data Lists <br/>
+	    <button type="button"
+	    	onclick="displayResult()">process text
+    	</button>
+	</td><td style="vertical-align:top;">
+		<p id="concepts">
+	</td><td style="vertical-align:top;">
+		<p id="hashtags">
+		<p id="mentions">
+		<p id="phonenumbers">
+		<p id="urls">
+		<p id="emails">
+		<p id="ipaddresses">
+		<p id="dates">
+		<p id="times">
+		<p id="currency">
+	</td></tr>
+	</table>
+</body>
+</html>
