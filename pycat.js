@@ -3,6 +3,27 @@ PyCat Routines
 Michael Bigrigg
 */
 
+/* removeWords()
+
+   This function is will remove any words from the text to be processed that the user specified.
+   If there are no words to be removed, then simply return the original input.
+   A regular expression will be made to remove words in textclean[] for each entry in textcleanremoved[]. 
+*/
+
+function removeWords(textclean, textcleanremoved){
+  if (textcleanremoved.length == 0){
+    return textclean;
+  }
+  console.log(textclean);
+  for(var i = 0; i < textcleanremoved.length; i++){
+    var replace = textcleanremoved[i];
+    var re = new RegExp(replace, "g");
+    textclean = textclean.replace(re, "");
+    console.log(textclean);
+  }
+  return textclean;
+}
+
 /* getDataLists()
 
    The following function is repsonisble for returning an array of lists consisting of strings that meet certain criteria (being a phone number, url, etc).
@@ -83,8 +104,8 @@ function createDataListDisplay(list, head){
 function prepare(intext)
 {
 <!-- replace the carriage return with a blank space -->
-textclean = intext.replace(/\n/g," ");
-return textclean;
+intext = intext.replace(/\n/g," ");
+return intext;
 }
 
 function lower(intext)

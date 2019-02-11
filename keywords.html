@@ -13,7 +13,7 @@ Michael Bigrigg
 	<script type="text/javascript">
 	function displayResult()
 	{
-		var textinput
+		var textinput;
 		var hashtagslist = [];
 		var mentionslist = [];
 		var phonenumberslist = [];
@@ -26,7 +26,7 @@ Michael Bigrigg
 
 		// value that holds string input by user
 		textinput = document.getElementById("myTextarea").value;
-
+		textremovedinput = document.getElementById("removedText").value;
 		/*
 		prepare() - Replaces all newline characters with " ".
 		lower() - Transforms all chracters to to lower case.
@@ -36,9 +36,14 @@ Michael Bigrigg
     */
 
 		textclean = prepare(textinput);
+		textcleanremoved = prepare(textremovedinput);
 		textclean = lower(textclean);
+		textcleanremoved = lower(textcleanremoved);
 
 		wordlistsymbols = textclean.split(" "); //a wordlist still containing symbols for data list option
+		textcleanremoved = textcleanremoved.split(" "); // a wordlist of words to be removedText
+
+		textclean = removeWords(textclean, textcleanremoved);
 
 		textclean = removesymbols(textclean);
 		if (document.getElementById("noiseWordsCheck").checked == true){ // ensures check box is checked
@@ -125,11 +130,15 @@ Michael Bigrigg
     	and press <i>process text</i></P>
     	<textarea id="myTextarea" rows="20" cols="40"></textarea>
     	<br/>
-			<input type="checkbox" id="noiseWordsCheck"> Noise Words <br/>
+			<input type="checkbox" id="noiseWordsCheck"> Noise Words </input>
 			<input type="checkbox" id="dataListsCheck"> Data Lists <br/>
 	    <button type="button"
 	    	onclick="displayResult()">process text
     	</button>
+	</td><td style="vertical-align:top;">
+		<P>Enter the concepts to be removed into the text<br/>
+		box below</P>
+		<textarea id="removedText" rows="20" cols="40"></textarea>
 	</td><td style="vertical-align:top;">
 		<p id="concepts">
 	</td><td style="vertical-align:top;">
