@@ -54,18 +54,24 @@ Michael Bigrigg
 		// Splits up every word into a list and sorts alphabetically
 		wordlist = textclean.split(" ");
 		wordlist.sort();
-
+		/*
+		* adding the next line of code fixed the bug where the last alphabetical word
+		* was removed. the issue was that the last word in the alphabet never became
+		* "old", so i just push a new last word onto the list to ensure that the 
+		* last input from the text gets added to sorted[].
+		*/
+		wordlist.push(" ");		
 		var i = 0;
 		var count = 1;
 		var old = "";
 		var sorted = [];
 		// create concept list from word list
-		for (i=0;i<wordlist.length;i++) {
+		for (i=0;i<wordlist.length;i++) {	
 			if (wordlist[i].length>0) {
-				if (wordlist[i] != old) {
+				if (wordlist[i] != old) { 
 					if ((old.length>0)
-						&& (old.charCodeAt(0) != 13)
-						&& (old != "")) {
+						&& (old.charCodeAt(0) != 13)	
+						&& (old != "")) {			
 							sorted.push(count.toString()+" "+old);
 					}
 					count = 1;
@@ -74,11 +80,11 @@ Michael Bigrigg
 					count = count + 1;
 				}
 				old = wordlist[i];
+				
 			}
 			else {
 			}
 		}
-
 		sorted.sort();
 		sorted.reverse();
 
@@ -132,6 +138,8 @@ Michael Bigrigg
     	<br/>
 			<input type="checkbox" id="noiseWordsCheck"> Noise Words </input>
 			<input type="checkbox" id="dataListsCheck"> Data Lists <br/>
+		<button type="button" 
+			onclick="addSampleData()">Sample Data</button>
 	    <button type="button"
 	    	onclick="displayResult()">process text
     	</button>
