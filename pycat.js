@@ -7,19 +7,17 @@ Michael Bigrigg
 
    This function is will remove any words from the text to be processed that the user specified.
    If there are no words to be removed, then simply return the original input.
-   A regular expression will be made to remove words in textclean[] for each entry in textcleanremoved[]. 
+   A regular expression will be made to remove words in textclean[] for each entry in textcleanremoved[].
 */
 
 function removeWords(textclean, textcleanremoved){
   if (textcleanremoved.length == 0){
     return textclean;
   }
-  console.log(textclean);
   for(var i = 0; i < textcleanremoved.length; i++){
     var replace = textcleanremoved[i];
     var re = new RegExp(replace, "g");
     textclean = textclean.replace(re, "");
-    console.log(textclean);
   }
   return textclean;
 }
@@ -42,7 +40,7 @@ function getDataLists(wordlistsymbols){
   var dateslist = [];
   var timeslist = [];
   var currencylist = [];
-  
+
   for (i=0;i<wordlistsymbols.length;i++) {
     var phonenumber = /^(\([0-9]{3}\)\s*|[0-9]{3}\-)[0-9]{3}-[0-9]{4}$/;
     var url = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
