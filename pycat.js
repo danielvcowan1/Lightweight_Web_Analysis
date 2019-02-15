@@ -200,3 +200,4 @@ function removeCommonAdjectives(textclean)
   }); 
 
   removeWords(textclean, perLine); 
+}
