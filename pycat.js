@@ -166,3 +166,27 @@ function addSampleData()
                      'and that government of the people, by the people, for the people, shall not perish from the earth.';
 
 }
+
+function displayDataLists(wordlistsymbols)
+{
+  /* DATA LISTS
+
+       The following code will first check to ensure that the user has checked the box for data lists.
+       A function getDataLists() in pycat.js is called to generate the different lists and they are placed in an array of lists called datalists.
+       Lastly, the function createDataListDisplay() is called for each entry in the datalists array to display to the user.
+
+    */
+
+      var datalists = [];
+      datalists = getDataLists(wordlistsymbols);
+
+      document.getElementById("hashtags").innerHTML = createDataListDisplay(datalists[0], "Hashtags: ");
+      document.getElementById("mentions").innerHTML = createDataListDisplay(datalists[1], "Mentions: ");
+      document.getElementById("phonenumbers").innerHTML = createDataListDisplay(datalists[2], "Phone Numbers: ");
+      document.getElementById("urls").innerHTML = createDataListDisplay(datalists[3], "URLs: ");
+      document.getElementById("emails").innerHTML = createDataListDisplay(datalists[4], "E-mails: ");
+      document.getElementById("ipaddresses").innerHTML = createDataListDisplay(datalists[5], "IP Addresses: ");
+      document.getElementById("dates").innerHTML = createDataListDisplay(datalists[6], "Dates: ");
+      document.getElementById("times").innerHTML = createDataListDisplay(datalists[7], "Times: ");
+      document.getElementById("currency").innerHTML = createDataListDisplay(datalists[8], "Currency: ");
+}

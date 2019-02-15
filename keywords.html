@@ -101,28 +101,6 @@ Michael Bigrigg
 		document.getElementById("concepts").innerHTML = conceptlist;
 
 
-		/* DATA LISTS
-
-			 The following code will first check to ensure that the user has checked the box for data lists.
-			 A function getDataLists() in pycat.js is called to generate the different lists and they are placed in an array of lists called datalists.
-			 Lastly, the function createDataListDisplay() is called for each entry in the datalists array to display to the user.
-
-		*/
-
-		if (document.getElementById("dataListsCheck").checked == true){
-			var datalists = [];
-			datalists = getDataLists(wordlistsymbols);
-
-			document.getElementById("hashtags").innerHTML = createDataListDisplay(datalists[0], "Hashtags: ");
-			document.getElementById("mentions").innerHTML = createDataListDisplay(datalists[1], "Mentions: ");
-			document.getElementById("phonenumbers").innerHTML = createDataListDisplay(datalists[2], "Phone Numbers: ");
-			document.getElementById("urls").innerHTML = createDataListDisplay(datalists[3], "URLs: ");
-			document.getElementById("emails").innerHTML = createDataListDisplay(datalists[4], "E-mails: ");
-			document.getElementById("ipaddresses").innerHTML = createDataListDisplay(datalists[5], "IP Addresses: ");
-			document.getElementById("dates").innerHTML = createDataListDisplay(datalists[6], "Dates: ");
-			document.getElementById("times").innerHTML = createDataListDisplay(datalists[7], "Times: ");
-			document.getElementById("currency").innerHTML = createDataListDisplay(datalists[8], "Currency: ");
-		}
 }
 
 	</script>
@@ -131,18 +109,21 @@ Michael Bigrigg
 
     <H2>SIMPLE KEYWORD TOOL</H2>
 	<table>
-	<tr><td>
+	<tr><td style="vertical-align:top;">
     	<P>Copy and paste your data into the text box<br/>
     	and press <i>process text</i></P>
     	<textarea id="myTextarea" rows="20" cols="40"></textarea>
     	<br/>
 			<input type="checkbox" id="noiseWordsCheck">Remove Noise Words</input>
-			<input type="checkbox" id="dataListsCheck">Include Data Lists<br/>
+		<br/>
 		<button type="button"
 			onclick="addSampleData()">Sample Data</button>
 	    <button type="button"
 	    	onclick="displayResult()">Process Text
     	</button>
+    	<button type="button"
+			onclick="displayDataLists(wordlistsymbols)">Include Data Lists
+		</button>
 	</td><td style="vertical-align:top;">
 		<P>Enter the concepts to be removed into the text<br/>
 		box below</P>
