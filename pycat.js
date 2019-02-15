@@ -190,3 +190,13 @@ function displayDataLists(wordlistsymbols)
       document.getElementById("times").innerHTML = createDataListDisplay(datalists[7], "Times: ");
       document.getElementById("currency").innerHTML = createDataListDisplay(datalists[8], "Currency: ");
 }
+
+function removeCommonAdjectives(textclean)
+{
+  var perLine; 
+  const fs = require('fs');
+  fs.readFile('adjwords.txt', function (text){
+    perLine = text.split('\n');
+  }); 
+
+  removeWords(textclean, perLine); 
