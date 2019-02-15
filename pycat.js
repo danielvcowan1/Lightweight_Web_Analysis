@@ -193,11 +193,5 @@ function displayDataLists(wordlistsymbols)
 
 function removeCommonAdjectives(textclean)
 {
-  var perLine; 
-  const fs = require('fs');
-  fs.readFile('adjwords.txt', function (text){
-    perLine = text.split('\n');
-  }); 
 
-  removeWords(textclean, perLine); 
 }
