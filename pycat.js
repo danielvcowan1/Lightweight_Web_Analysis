@@ -233,3 +233,8 @@ function displayDataLists(wordlistsymbols)
       output = removeCommas(output);
   		document.getElementById("dlists").innerHTML = output;
 }
+
+function removeCommonAdjectives(textclean)
+{
+
+}
