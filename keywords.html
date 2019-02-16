@@ -11,18 +11,18 @@ Michael Bigrigg
 	<script type="text/javascript" src="pycat.js"></script>
 
 	<script type="text/javascript">
-	function displayResult()
-	{
-		var textinput;
 		var hashtagslist = [];
 		var mentionslist = [];
 		var phonenumberslist = [];
 		var urlslist = [];
-		var emails = [];
-		var ipaddresses = [];
-		var dates = [];
-		var times = [];
-		var currency = [];
+		var emailslist = [];
+		var ipaddresslist = [];
+		var dateslist = [];
+		var timeslist = [];
+		var currencylist = [];
+	function displayResult()
+	{
+		var textinput;
 
 		// value that holds string input by user
 		textinput = document.getElementById("myTextarea").value;
@@ -51,7 +51,7 @@ Michael Bigrigg
 		if (document.getElementById("commonAdjCheck").checked == true){ // ensures check box is checked
 				textclean = removeCommonAdjectives(textclean);
 		}
-		
+
 		textclean = subcompound(textclean);
 
 		// Splits up every word into a list and sorts alphabetically

@@ -31,15 +31,6 @@ function removeWords(textclean, textcleanremoved){
 */
 
 function getDataLists(wordlistsymbols){
-  var hashtagslist = [];
-  var mentionslist = [];
-  var phonenumberslist = [];
-  var urlslist = [];
-  var emailslist = [];
-  var ipaddresslist = [];
-  var dateslist = [];
-  var timeslist = [];
-  var currencylist = [];
 
   for (i=0;i<wordlistsymbols.length;i++) {
     var phonenumber = /^(\([0-9]{3}\)\s*|[0-9]{3}\-)[0-9]{3}-[0-9]{4}$/;
@@ -132,8 +123,6 @@ function getDataLists(wordlistsymbols){
       currencylist.push(x);
     }
   }
-  console.log(hashtagslist);
-  console.log(mentionslist);
   return [hashtagslist, mentionslist, phonenumberslist, urlslist, emailslist, ipaddresslist, dateslist, timeslist, currencylist];
 }
 
