@@ -36,12 +36,11 @@ Michael Bigrigg
     */
 
 		textclean = prepare(textinput);
-		textcleanremoved = prepare(textremovedinput);
 		textclean = lower(textclean);
-		textcleanremoved = lower(textcleanremoved);
+		textcleanremoved = lower(textremovedinput);
 
 		wordlistsymbols = textclean.split(" "); //a wordlist still containing symbols for data list option
-		textcleanremoved = textcleanremoved.split(" "); // a wordlist of words to be removedText
+		textcleanremoved = textcleanremoved.split("\n"); // a wordlist of words to be removedText
 
 		textclean = removeWords(textclean, textcleanremoved);
 
