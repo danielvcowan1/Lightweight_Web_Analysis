@@ -50,24 +50,58 @@ function getDataLists(wordlistsymbols){
     var time = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/;
     var currency = /^\$?[0-9]+(\.[0-9][0-9])?$/;
     if(wordlistsymbols[i].charAt(0) == '#'){
-      hashtagslist.push(wordlistsymbols[i]);
+      if (hashtagslist.length == 0){
+        label = "<td>Hashtags:</td>";
+        hashtagslist.push(label);
+      }
+      x = "<td>" + wordlistsymbols[i] + "</td>";
+      hashtagslist.push(x);
     }
     else if(wordlistsymbols[i].charAt(0) == '@'){
-      mentionslist.push(wordlistsymbols[i]);
+      if (mentionslist.length == 0){
+        label = "<td>Mentions:</td>";
+        mentionslist.push(label);
+      }
+      x = "<td>" + wordlistsymbols[i] + "</td>";
+      mentionslist.push(x);
     }
     else if(wordlistsymbols[i].match(phonenumber)){
-      phonenumberslist.push(wordlistsymbols[i]);
+      if (phonenumberslist.length == 0){
+        label = "<td>Phone Numbers:</td>";
+        phonenumberslist.push(label);
+      }
+      x = "<td>" + wordlistsymbols[i] + "</td>";
+      phonenumberslist.push(x);
     }
     else if(wordlistsymbols[i].match(url)){
-      urlslist.push(wordlistsymbols[i]);
+      if (urlslist.length == 0){
+        label = "<td>URLs:</td>";
+        urlslist.push(label);
+      }
+      x = "<td>" + wordlistsymbols[i] + "</td>";
+      urlslist.push(x);
     }
     else if(wordlistsymbols[i].match(email)){
-      emailslist.push(wordlistsymbols[i]);
+      if (emailslist.length == 0){
+        label = "<td>E-Mails:</td>";
+        emailslist.push(label);
+      }
+      x = "<td>" + wordlistsymbols[i] + "</td>";
+      emailslist.push(x);
     }
     else if(wordlistsymbols[i].match(ipaddress)){
-      ipaddresslist.push(wordlistsymbols[i]);
+      if (ipaddresslist.length == 0){
+        label = "<td>IP Addresses:</td>";
+        ipaddresslist.push(label);
+      }
+      x = "<td>" + wordlistsymbols[i] + "</td>";
+      ipaddresslist.push(x);
     }
     else if(wordlistsymbols[i].match(date)){
+      if (dateslist.length == 0){
+        label = "<td>Dates:</td>";
+        dateslist.push(label);
+      }
       var parts = wordlistsymbols[i].split("/");
       var day = parseInt(parts[1], 10);
       var month = parseInt(parts[0], 10);
@@ -77,28 +111,32 @@ function getDataLists(wordlistsymbols){
         monthLength[1] = 29;
       }
       if (day > 0 && day <= monthLength[month - 1] && year > 0 && month > 0 && month <= 12){
-        dateslist.push(wordlistsymbols[i]);
+        x = "<td>" + wordlistsymbols[i] + "</td>";
+        dateslist.push(x);
       }
     }
     else if(wordlistsymbols[i].match(time)){
-      timeslist.push(wordlistsymbols[i]);
+      if (timeslist.length == 0){
+        label = "<td>Times:</td>";
+        timeslist.push(label);
+      }
+      x = "<td>" + wordlistsymbols[i] + "</td>";
+      timeslist.push(x);
     }
     else if(wordlistsymbols[i].match(currency)){
-      currencylist.push(wordlistsymbols[i]);
+      if (currencylistslist.length == 0){
+        label = "<td>Times:</td>";
+        currencylist.push(label);
+      }
+      x = "<td>" + wordlistsymbols[i] + "</td>";
+      currencylist.push(x);
     }
   }
+  console.log(hashtagslist);
+  console.log(mentionslist);
   return [hashtagslist, mentionslist, phonenumberslist, urlslist, emailslist, ipaddresslist, dateslist, timeslist, currencylist];
 }
 
-function createDataListDisplay(list, head){
-  for(i=0;i<list.length;i++){
-    head += list[i] + ", ";
-  }
-  if(list.length == 0){
-    head += "None";
-  }
-  return head;
-}
 
 function prepare(intext)
 {
@@ -167,6 +205,11 @@ function addSampleData()
 
 }
 
+function removeCommas(output_with_commas){
+  output_without_commas = output_with_commas.replace(/\,/g," ");
+  return output_without_commas;
+}
+
 function displayDataLists(wordlistsymbols)
 {
   /* DATA LISTS
@@ -180,13 +223,13 @@ function displayDataLists(wordlistsymbols)
       var datalists = [];
       datalists = getDataLists(wordlistsymbols);
 
-      document.getElementById("hashtags").innerHTML = createDataListDisplay(datalists[0], "Hashtags: ");
-      document.getElementById("mentions").innerHTML = createDataListDisplay(datalists[1], "Mentions: ");
-      document.getElementById("phonenumbers").innerHTML = createDataListDisplay(datalists[2], "Phone Numbers: ");
-      document.getElementById("urls").innerHTML = createDataListDisplay(datalists[3], "URLs: ");
-      document.getElementById("emails").innerHTML = createDataListDisplay(datalists[4], "E-mails: ");
-      document.getElementById("ipaddresses").innerHTML = createDataListDisplay(datalists[5], "IP Addresses: ");
-      document.getElementById("dates").innerHTML = createDataListDisplay(datalists[6], "Dates: ");
-      document.getElementById("times").innerHTML = createDataListDisplay(datalists[7], "Times: ");
-      document.getElementById("currency").innerHTML = createDataListDisplay(datalists[8], "Currency: ");
+      console.log(datalists);
+      output = "<table>";
+  		for(i=0;i<datalists.length;i++){
+  			if (datalists[i].length != 0) output += "<tr>" + datalists[i] + "</tr>";
+  		}
+      console.log(output);
+  		output += "</table>";
+      output = removeCommas(output);
+  		document.getElementById("dlists").innerHTML = output;
 }
