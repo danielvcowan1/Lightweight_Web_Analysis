@@ -236,7 +236,8 @@ function countViews(weblog){
 
 // function for displaying number of views once user hits the Numver of Views button
 function displayViews(){
-  document.getElementById("numViews").innerHTML = "Total number of views: " + numviews;
+  output = "<table><tr><td>" + "Total number of views: " + "</td><td>" + numviews + "</td>";
+  document.getElementById("numViews").innerHTML = output;
 }
 
 //function that will add unique IP addresses to uniquevisitors[]. Duplicates will be excluded.
@@ -258,5 +259,6 @@ function countVisitors(weblog){
 }
 
 function displayUniqueVisitorCount(){
-  document.getElementById("numViews").innerHTML = "Number of unique visitors: " + uniquevisitors.length;
+  output = "<table><tr><td>" + "Number of unique vistors: " + "</td><td>" + uniquevisitors.length + "</td>";
+  document.getElementById("numViews").innerHTML = output;
 }
