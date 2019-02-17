@@ -260,5 +260,5 @@ function countVisitors(weblog){
 
 function displayUniqueVisitorCount(){
   output = "<table><tr><td>" + "Number of unique vistors: " + "</td><td>" + uniquevisitors.length + "</td>";
-  document.getElementById("numViews").innerHTML = output;
+  document.getElementById("unique_visitor_count").innerHTML = output;
 }
