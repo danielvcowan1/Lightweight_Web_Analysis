@@ -238,3 +238,25 @@ function countViews(weblog){
 function displayViews(){
   document.getElementById("numViews").innerHTML = "Total number of views: " + numviews;
 }
+
+//function that will add unique IP addresses to uniquevisitors[]. Duplicates will be excluded.
+function countVisitors(weblog){
+    var ipaddress = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    for (var i = 0;i<weblog.length;i++){
+      var twin = 0;                                   //0 if it is not a duplicate IP. 1 if it is
+      if(weblog[i].match(ipaddress)){
+        for(var j = 0;j<uniquevisitors.length;j++){
+          if (weblog[i] == uniquevisitors[j]){        //checks for duplcicate (possibly think about optimizing)
+            twin = 1;
+          }
+        }
+        if (twin == 0){
+            uniquevisitors.push(weblog[i]);
+        }
+      }
+    }
+}
+
+function displayUniqueVisitorCount(){
+  document.getElementById("numViews").innerHTML = "Number of unique visitors: " + uniquevisitors.length;
+}

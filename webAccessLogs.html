@@ -4,12 +4,18 @@
     <script type="text/javascript">
 
     numviews = 0; // globally stores total number of views
+    uniquevisitors = [];
 
       function displayResult(){
         	textinput = document.getElementById("myTextarea").value;
 
           // will count views every time the user presses process
           countViews(textinput);
+
+
+          textclean = prepare(textinput);
+          separateIPs = textclean.split(" ");
+          countVisitors(separateIPs);
       }
     </script>
   </head
@@ -27,8 +33,13 @@
         <button type="button"
           onclick="displayViews()">Total Page Views
         </button>
+        <button type="button"
+          onclick="displayUniqueVisitorCount()">Unique Visitor Count
+        </button>
       </td><td style="vertical-align:top;">
         <p id="numViews">
+      </td><td style="vertical-align:top;">
+        <p id="unique_visitor_count">
       </td>
     </table>
   </body>
