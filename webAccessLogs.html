@@ -1,6 +1,17 @@
 <html>
   <head>
     <script type="text/javascript" src="pycat.js"></script>
+    <script type="text/javascript">
+
+    numviews = 0; // globally stores total number of views
+
+      function displayResult(){
+        	textinput = document.getElementById("myTextarea").value;
+
+          // will count views every time the user presses process
+          countViews(textinput);
+      }
+    </script>
   </head
   <body>
     <H2>WEB ACCESS LOG TOOL</H2>
@@ -13,6 +24,11 @@
         <button type="button"
           onclick="displayResult()">Process Text
         </button>
+        <button type="button"
+          onclick="displayViews()">Total Page Views
+        </button>
+      </td><td style="vertical-align:top;">
+        <p id="numViews">
       </td>
     </table>
   </body>

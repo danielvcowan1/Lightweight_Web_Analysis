@@ -194,6 +194,7 @@ function addSampleData()
 
 }
 
+// Removes commas that were appearing in datalists
 function removeCommas(output_with_commas){
   output_without_commas = output_with_commas.replace(/\,/g," ");
   return output_without_commas;
@@ -226,4 +227,14 @@ function displayDataLists(wordlistsymbols)
 function removeCommonAdjectives(textclean)
 {
 
+}
+
+// function for adding number of views
+function countViews(weblog){
+  numviews += (weblog.match(/GET/g) || []).length;
+}
+
+// function for displaying number of views once user hits the Numver of Views button
+function displayViews(){
+  document.getElementById("numViews").innerHTML = "Total number of views: " + numviews;
 }
