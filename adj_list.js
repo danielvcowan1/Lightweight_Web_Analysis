@@ -21929,4 +21929,4 @@ var adj_words = ["a-ok",
 "zygotic",
 "zymoid",
 "zymolytic",
-"zymotic"]
+"zymotic"];
