@@ -8,14 +8,14 @@ Michael Bigrigg
    This function is will remove any words from the text to be processed that the user specified.
    If there are no words to be removed, then simply return the original input.
    A regular expression will be made to remove words in textclean[] for each entry in textcleanremoved[].
-*/
+*/ 
 
 function removeWords(textclean, textcleanremoved){
   if (textcleanremoved.length == 0){
     return textclean;
   }
   for(var i = 0; i < textcleanremoved.length; i++){
-    var replace = textcleanremoved[i];
+    var replace = textcleanremoved[i] + " ";
     var re = new RegExp(replace, "g");
     textclean = textclean.replace(re, "");
   }
@@ -226,7 +226,8 @@ function displayDataLists(wordlistsymbols)
 
 function removeCommonAdjectives(textclean)
 {
-
+  textclean = removeWords(textclean, adj_words); 
+  return textclean;
 }
 
 // function for adding number of views
