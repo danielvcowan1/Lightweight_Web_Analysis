@@ -9,14 +9,25 @@
       function displayResult(){
         	textinput = document.getElementById("myTextarea").value;
 
-          // will count views every time the user presses process
-          countViews(textinput);
-
-
           textclean = prepare(textinput);
           separateIPs = textclean.split(" ");
+        /*
+        * I changed around some of the functionality of display result. 
+        * it starts a fresh count of total page views each time.
+        * adding it to the old count doesn't work - we need to be able to paste in a new web access log
+        * and process the text without it adding onto old data. 
+        */ 
+        if (document.getElementById("totalPageViews").checked == true){ 
+          countViews(textinput);
+          displayViews(); 
+        }
+        if (document.getElementById("uniqueVisitorCount").checked == true){ 
           countVisitors(separateIPs);
+          displayUniqueVisitorCount();  
+        }
       }
+
+
     </script>
   </head>
   <body>
@@ -30,12 +41,8 @@
         <button type="button"
           onclick="displayResult()">Process Text
         </button>
-        <button type="button"
-          onclick="displayViews()">Total Page Views
-        </button>
-        <button type="button"
-          onclick="displayUniqueVisitorCount()">Unique Visitor Count
-        </button>
+        <input type="checkbox" id="totalPageViews">Total Page Views </input> <!--i changed total page views / visitor count to checkboxes to make it easier to use -->
+        <input type="checkbox" id="uniqueVisitorCount">Unique Visitor Count </input>
       </td><td style="vertical-align:top;">
         <p id="numViews">
         <p id="unique_visitor_count">
