@@ -279,6 +279,9 @@ function displayUniqueVisitorCount(){
   document.getElementById("unique_visitor_count").innerHTML = output;
 }
 
+/*
+   The function pageAccessCount() will use the same code that counts words in the keywords program to sort by view count
+*/
 function pageAccessCount(weblog){
   pages = getPages(weblog);
   pages.sort();
