@@ -14,19 +14,19 @@ function removeWords(textclean, textcleanremoved){
   if (textcleanremoved == "" ) {
     return textclean;
   }
-  var replace = ""; 
+  var replace = "";
   for(var i = 0; i < textcleanremoved.length; i++){
-    if (i > 1)  //if its not the first word we need to make sure it's matching the whole word, with a space @ the front and back 
+    if (i > 1)  //if its not the first word we need to make sure it's matching the whole word, with a space @ the front and back
     {
-      replace = " " + textcleanremoved[i] + " ";  
+      replace = " " + textcleanremoved[i] + " ";
     }
     else //if this is the first word, only check for a space after the word
     {
-      replace = textcleanremoved[i] + " "; 
+      replace = textcleanremoved[i] + " ";
     }
     var re = new RegExp(replace, "g");
     textclean = textclean.replace(re, " ");
-    
+
   }
   return textclean;
 }
@@ -43,7 +43,7 @@ function getDataLists(wordlistsymbols){
 
   for (i=0;i<wordlistsymbols.length;i++) {
     var phonenumber = /^(\([0-9]{3}\)\s*|[0-9]{3}\-)[0-9]{3}-[0-9]{4}$/;
-    var url = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
+    var url = /[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
     var email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var ipaddress = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     var date = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
@@ -235,13 +235,13 @@ function displayDataLists(wordlistsymbols)
 
 function removeCommonAdjectives(textclean)
 {
-  textclean = removeWords(textclean, adj_words); 
+  textclean = removeWords(textclean, adj_words);
   return textclean;
 }
 
 function removeCommonAdverbs(textclean)
 {
-  textclean = removeWords(textclean, adv_words); 
+  textclean = removeWords(textclean, adv_words);
   return textclean;
 }
 
@@ -277,4 +277,66 @@ function countVisitors(weblog){
 function displayUniqueVisitorCount(){
   output = "<table><tr><td>" + "Number of unique vistors: " + "</td><td>" + uniquevisitors.length + "</td>";
   document.getElementById("unique_visitor_count").innerHTML = output;
+}
+
+function pageAccessCount(weblog){
+  pages = getPages(weblog);
+  pages.sort();
+  var count = 1;
+  var old = "";
+  var sorted_pages = [];
+  for (var i=0;i<pages.length;i++) {
+    if (pages[i].length>0) {
+      if (pages[i] != old) {
+        if ((old.length>0)
+          && (old.charCodeAt(0) != 13)
+          && (old != "")) {
+            sorted_pages.push(count.toString()+" "+old);
+        }
+        count = 1;
+      }
+      else {
+        count = count + 1;
+      }
+      old = pages[i];
+
+    }
+    else {
+    }
+    if (count == 1 && i == pages.length - 1){
+      sorted_pages.push(count.toString()+" "+old);
+    }
+  }
+  sorted_pages.sort();
+  sorted_pages.reverse();
+  return sorted_pages;
+}
+
+function displayPageAccessCount(sorted_pages){
+  conceptlist = "<table>";
+  for(i=0;i<sorted_pages.length;i++){
+    printable = sorted_pages[i].split(" ");
+    conceptlist += "<tr><td>"
+          +printable[0]
+          +"</td><td>"
+          +printable[1]
+          +"</td><td>";
+  }
+  conceptlist += "</table>";
+  document.getElementById("page_access_count").innerHTML = conceptlist;
+}
+
+/*
+   The function getPages() will return a list of all web addresses that were accessed, including Duplicates
+   Takes a weblog that has been split at the spaces as a parameter
+*/
+function getPages(weblog){
+  var url = /[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
+  pages = [];
+  for (var i = 0; i<weblog.length;i++){
+    if(weblog[i].match(url)){
+      pages.push(weblog[i]);
+    }
+  }
+  return pages;
 }

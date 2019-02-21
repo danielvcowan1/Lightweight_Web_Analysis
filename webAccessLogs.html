@@ -10,20 +10,24 @@
         	textinput = document.getElementById("myTextarea").value;
 
           textclean = prepare(textinput);
-          separateIPs = textclean.split(" ");
+          separate_text = textclean.split(" ");
         /*
-        * I changed around some of the functionality of display result. 
+        * I changed around some of the functionality of display result.
         * it starts a fresh count of total page views each time.
         * adding it to the old count doesn't work - we need to be able to paste in a new web access log
-        * and process the text without it adding onto old data. 
-        */ 
-        if (document.getElementById("totalPageViews").checked == true){ 
+        * and process the text without it adding onto old data.
+        */
+        if (document.getElementById("totalPageViews").checked == true){
           countViews(textinput);
-          displayViews(); 
+          displayViews();
         }
-        if (document.getElementById("uniqueVisitorCount").checked == true){ 
-          countVisitors(separateIPs);
-          displayUniqueVisitorCount();  
+        if (document.getElementById("uniqueVisitorCount").checked == true){
+          countVisitors(separate_text);
+          displayUniqueVisitorCount();
+        }
+        if (document.getElementById("pageAccessCount").checked == true){
+          result = pageAccessCount(separate_text);
+          displayPageAccessCount(result);
         }
       }
 
@@ -42,10 +46,13 @@
           onclick="displayResult()">Process Text
         </button>
         <input type="checkbox" id="totalPageViews">Total Page Views </input> <!--i changed total page views / visitor count to checkboxes to make it easier to use -->
+        <br>
         <input type="checkbox" id="uniqueVisitorCount">Unique Visitor Count </input>
+        <input type='checkbox' id="pageAccessCount">Page Access Count</input>
       </td><td style="vertical-align:top;">
         <p id="numViews">
         <p id="unique_visitor_count">
+        <p id="page_access_count">
       </td>
     </table>
   </body>
