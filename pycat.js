@@ -245,6 +245,12 @@ function removeCommonAdverbs(textclean)
   return textclean;
 }
 
+function removeCommonVerbs(textclean)
+{
+  textclean = removeWords(textclean, verb_words);
+  return textclean;
+}
+
 // function for adding number of views
 function countViews(weblog){
   var numviews = 0;
