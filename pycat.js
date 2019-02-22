@@ -247,17 +247,14 @@ function removeCommonAdverbs(textclean)
 
 // function for adding number of views
 function countViews(weblog){
+  var numviews = 0;
   numviews = (weblog.match(/GET/g) || []).length;
-}
-
-// function for displaying number of views once user hits the Numver of Views button
-function displayViews(){
-  output = "<table><tr><td>" + "Total number of views: " + "</td><td>" + numviews + "</td>";
-  document.getElementById("numViews").innerHTML = output;
+  return numviews;
 }
 
 //function that will add unique IP addresses to uniquevisitors[]. Duplicates will be excluded.
-function countVisitors(weblog){
+function countUniqueVisitors(weblog){
+    uniquevisitors = [];
     var ipaddress = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     for (var i = 0;i<weblog.length;i++){
       var twin = 0;                                   //0 if it is not a duplicate IP. 1 if it is
@@ -272,11 +269,7 @@ function countVisitors(weblog){
         }
       }
     }
-}
-
-function displayUniqueVisitorCount(){
-  output = "<table><tr><td>" + "Number of unique vistors: " + "</td><td>" + uniquevisitors.length + "</td>";
-  document.getElementById("unique_visitor_count").innerHTML = output;
+    return uniquevisitors;
 }
 
 /*
@@ -315,6 +308,49 @@ function pageAccessCount(weblog){
   return sorted_pages;
 }
 
+/*
+   The function getPages() will return a list of all web addresses that were accessed, including Duplicates
+   Takes a weblog that has been split at the spaces as a parameter
+*/
+function getPages(weblog){
+  var url = /[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
+  pages = [];
+  for (var i = 0; i<weblog.length;i++){
+    if(weblog[i].match(url)){
+      pages.push(weblog[i]);
+    }
+  }
+  return pages;
+}
+
+/*
+  Uses previous functions getPages() and countUniqueVisitors() to find the average pages per visit
+*/
+
+function averagePagePerVisit(weblog){
+  pages = getPages(weblog);
+  uniquevisitors = countUniqueVisitors(weblog);
+  average = pages.length/uniquevisitors.length;
+  return average;
+}
+
+/////////////////////////////////////////////////////////////////////
+///////     DISPLAY FUNCTIONS BELOW   //////////////////////////////
+//|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||//
+//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+
+
+// function for displaying number of views once user hits the Numver of Views button
+function displayViews(numviews){
+  output = "<table><tr><td>" + "Total number of views: " + "</td><td>" + numviews + "</td>";
+  document.getElementById("numViews").innerHTML = output;
+}
+
+function displayUniqueVisitorCount(uniquevisitors){
+  output = "<table><tr><td>" + "Number of unique vistors: " + "</td><td>" + uniquevisitors.length + "</td>";
+  document.getElementById("unique_visitor_count").innerHTML = output;
+}
+
 function displayPageAccessCount(sorted_pages){
   conceptlist = "<table>";
   for(i=0;i<sorted_pages.length;i++){
@@ -329,17 +365,8 @@ function displayPageAccessCount(sorted_pages){
   document.getElementById("page_access_count").innerHTML = conceptlist;
 }
 
-/*
-   The function getPages() will return a list of all web addresses that were accessed, including Duplicates
-   Takes a weblog that has been split at the spaces as a parameter
-*/
-function getPages(weblog){
-  var url = /[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
-  pages = [];
-  for (var i = 0; i<weblog.length;i++){
-    if(weblog[i].match(url)){
-      pages.push(weblog[i]);
-    }
-  }
-  return pages;
+function displayAveragePagePerVisit(average){
+  average = average.toFixed(4);
+  output = "<table><tr><td>" + "Average number of pages per visit: " + "</td><td>" + average + "</td>";
+  document.getElementById("average_pages_per_visit").innerHTML = output;
 }

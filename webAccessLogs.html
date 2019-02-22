@@ -3,9 +3,6 @@
     <script type="text/javascript" src="pycat.js"></script>
     <script type="text/javascript">
 
-    numviews = 0; // globally stores total number of views
-    uniquevisitors = [];
-
       function displayResult(){
         	textinput = document.getElementById("myTextarea").value;
 
@@ -18,16 +15,20 @@
         * and process the text without it adding onto old data.
         */
         if (document.getElementById("totalPageViews").checked == true){
-          countViews(textinput);
-          displayViews();
+          result = countViews(textinput);
+          displayViews(result);
         }
         if (document.getElementById("uniqueVisitorCount").checked == true){
-          countVisitors(separate_text);
-          displayUniqueVisitorCount();
+          result = countUniqueVisitors(separate_text);
+          displayUniqueVisitorCount(result);
         }
         if (document.getElementById("pageAccessCount").checked == true){
           result = pageAccessCount(separate_text);
           displayPageAccessCount(result);
+        }
+        if (document.getElementById("averagePagePerVisit").checked == true){
+          result = averagePagePerVisit(separate_text);
+          displayAveragePagePerVisit(result);
         }
       }
 
@@ -49,9 +50,11 @@
         <br>
         <input type="checkbox" id="uniqueVisitorCount">Unique Visitor Count </input>
         <input type='checkbox' id="pageAccessCount">Page Access Count</input>
+        <input type='checkbox' id="averagePagePerVisit">Average Pages Per Visit</input>
       </td><td style="vertical-align:top;">
         <p id="numViews">
         <p id="unique_visitor_count">
+        <p id="average_pages_per_visit">
         <p id="page_access_count">
       </td>
     </table>
