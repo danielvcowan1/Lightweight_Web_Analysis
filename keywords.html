@@ -11,6 +11,7 @@ Michael Bigrigg
 	<script type="text/javascript" src="pycat.js"></script>
 	<script type="text/javascript" src="adj_list.js"></script>
 	<script type="text/javascript" src="adv_list.js"></script>
+	<script type="text/javascript" src="verb_list.js"></script>
 	<script type="text/javascript">
 		var hashtagslist = [];
 		var mentionslist = [];
@@ -54,6 +55,9 @@ Michael Bigrigg
 		}
 		if (document.getElementById("commonAdvCheck").checked == true){ // ensures check box is checked
 				textclean = removeCommonAdverbs(textclean);
+		}
+		if (document.getElementById("commonVerbCheck").checked == true){ // ensures check box is checked
+				textclean = removeCommonVerbs(textclean);
 		}
 
 		textclean = subcompound(textclean);
@@ -126,6 +130,8 @@ Michael Bigrigg
 			<input type="checkbox" id="commonAdjCheck">Remove Common Adjectives </input>
 		<br/>
 			<input type="checkbox" id="commonAdvCheck">Remove Common Adverbs </input>
+		<br/>
+			<input type="checkbox" id="commonVerbCheck">Remove Common Verbs </input>
 		<br/>
 		<button type="button"
 			onclick="addSampleData()">Sample Data</button>
