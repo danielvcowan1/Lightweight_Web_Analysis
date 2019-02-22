@@ -253,7 +253,7 @@ function countViews(weblog){
 }
 
 //function that will return unique IP addresses in uniquevisitors[]. Duplicates will be excluded.
-function countUniqueVisitors(weblog){
+function getUniqueVisitors(weblog){
     visitors = getVisitorsWithDuplicates(weblog);
     visitors.sort();
     uniquevisitors = [];
@@ -330,7 +330,7 @@ function pageAccessCount(weblog){
       sorted_pages.push(count.toString()+" "+old);
     }
   }
-  sorted_pages.sort();
+  sorted_pages.sort(customSort);
   sorted_pages.reverse();
   return sorted_pages;
 }
@@ -355,10 +355,66 @@ function getPages(weblog){
 */
 
 function averagePagePerVisit(weblog){
-  pages = getPages(weblog);
-  uniquevisitors = countUniqueVisitors(weblog);
+  visits = getPages(weblog);
+  uniquevisitors = getUniqueVisitors(weblog);
   average = pages.length/uniquevisitors.length;
   return average;
+}
+
+function maximumPagesPerVisit(weblog){
+  visitors = getVisitorsWithDuplicates(weblog);
+  visitors.sort();
+  var count = 1;
+  var max = 1;
+  var old= "";
+  for (var i = 0;i<visitors.length;i++){
+    if (visitors[i]) {
+      if (visitors[i] != old) {
+        if (count > max){
+          max = count;
+        }
+        count = 1;
+      }
+      else {
+        count = count + 1;
+      }
+      old = visitors[i];
+
+    }
+    else {
+    }
+    if (i == visitors.length - 1){
+      if (count > max){
+        max = count;
+      }
+    }
+  }
+  console.log(max);
+  return max;
+}
+
+function getVisits(weblog){
+    weblog.sort();
+    var ipaddress = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    var visits = [];
+    enterTimeStamp = "";
+    exitTimeStamp = "";
+    old = "";
+    currentip = "";
+
+    current_line = weblog[0].split(" ");
+    currentip = currentline[0];
+    enterTimeStamp = currentline[3];
+    enterTimeStamp = enterTimeStamp
+    for (var i = 0;i<weblog.length;i++){
+      current_line = weblog[i].split(" ");
+      if (current_line[1] != currentip){
+        exitTimeStamp = old[3];
+        timedifference = exitTimeStamp
+        currentip = current_line[0];
+      }
+      old = current_line;
+    }
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -396,4 +452,14 @@ function displayAveragePagePerVisit(average){
   average = average.toFixed(4);
   output = "<table><tr><td>" + "Average number of pages per visit: " + "</td><td>" + average + "</td>";
   document.getElementById("average_pages_per_visit").innerHTML = output;
+}
+
+function displayMaximumPagesPerVisit(max){
+  output = "<table><tr><td>" + "Maxmimum Pages Per Visit: " + "</td><td>" + max + "</td>";
+  document.getElementById("maximum_pages_per_visit").innerHTML = output;
+}
+
+var customSort = function (a, b) {
+    return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));
+
 }
