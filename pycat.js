@@ -252,24 +252,51 @@ function countViews(weblog){
   return numviews;
 }
 
-//function that will add unique IP addresses to uniquevisitors[]. Duplicates will be excluded.
+//function that will return unique IP addresses in uniquevisitors[]. Duplicates will be excluded.
 function countUniqueVisitors(weblog){
+    visitors = getVisitorsWithDuplicates(weblog);
+    visitors.sort();
     uniquevisitors = [];
-    var ipaddress = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    for (var i = 0;i<weblog.length;i++){
-      var twin = 0;                                   //0 if it is not a duplicate IP. 1 if it is
-      if(weblog[i].match(ipaddress)){
-        for(var j = 0;j<uniquevisitors.length;j++){
-          if (weblog[i] == uniquevisitors[j]){        //checks for duplcicate (possibly think about optimizing)
-            twin = 1;
+    var old = "";
+    var count = 0;
+    for (var i = 0;i<visitors.length;i++){
+      if (visitors[i]) {
+        if (visitors[i] != old) {
+          if ((old.length>0)
+            && (old.charCodeAt(0) != 13)
+            && (old != "")) {
+              uniquevisitors.push(old);
           }
+          count = 1;
         }
-        if (twin == 0){
-            uniquevisitors.push(weblog[i]);
+        else {
+          count = count + 1;
         }
+        old = visitors[i];
+
+      }
+      else {
+      }
+      if (i == visitors.length - 1){
+        uniquevisitors.push(visitors[i]);
       }
     }
     return uniquevisitors;
+}
+
+
+/*
+    This function will return an array of every ip address including duplcicates
+*/
+function getVisitorsWithDuplicates(weblog){
+    var ipaddress = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    var visitors = [];
+    for (var i = 0;i<weblog.length;i++){
+      if (weblog[i].match(ipaddress)){
+        visitors.push(weblog[i])
+      }
+    }
+    return visitors;
 }
 
 /*
