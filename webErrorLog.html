@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <script type="text/javascript" src="pycat.js"></script>
+    <script type="text/javascript">
+
+    numviews = 0; // globally stores total number of views
+    uniquevisitors = [];
+
+      function displayResult(){
+        	textinput = document.getElementById("myTextarea").value;
+
+          textclean = prepare(textinput);
+          separate_text = textclean.split(" ");
+        /*
+        * I changed around some of the functionality of display result.
+        * it starts a fresh count of total page views each time.
+        * adding it to the old count doesn't work - we need to be able to paste in a new web access log
+        * and process the text without it adding onto old data.
+        */
+        if (document.getElementById("totalPageViews").checked == true){
+          countViews(textinput);
+          displayViews();
+        }
+      }
+
+
+    </script>
+  </head>
+  <body>
+    <H2>WEB ERROR LOG TOOL</H2>
+    <table>
+      <tr><td style="vertical-align:top;">
+        <P>Copy and paste your data into the text box<br/>
+        and press <i>process text</i></P>
+        <textarea id="myTextarea" rows="20" cols="40"></textarea>
+        <br/>
+        <button type="button"
+          onclick="displayResult()">Process Text
+        </button>
+        <input type="checkbox" id="totalPageViews">Total Page Views </input>
+      </td><td style="vertical-align:top;">
+        <p id="numViews">
+      </td>
+    </table>
+  </body>
+</html>

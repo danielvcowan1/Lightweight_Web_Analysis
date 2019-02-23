@@ -14,19 +14,19 @@ function removeWords(textclean, textcleanremoved){
   if (textcleanremoved == "" ) {
     return textclean;
   }
-  var replace = ""; 
+  var replace = "";
   for(var i = 0; i < textcleanremoved.length; i++){
-    if (i > 1)  //if its not the first word we need to make sure it's matching the whole word, with a space @ the front and back 
+    if (i > 1)  //if its not the first word we need to make sure it's matching the whole word, with a space @ the front and back
     {
-      replace = " " + textcleanremoved[i] + " ";  
+      replace = " " + textcleanremoved[i] + " ";
     }
     else //if this is the first word, only check for a space after the word
     {
-      replace = textcleanremoved[i] + " "; 
+      replace = textcleanremoved[i] + " ";
     }
     var re = new RegExp(replace, "g");
     textclean = textclean.replace(re, " ");
-    
+
   }
   return textclean;
 }
@@ -43,7 +43,7 @@ function getDataLists(wordlistsymbols){
 
   for (i=0;i<wordlistsymbols.length;i++) {
     var phonenumber = /^(\([0-9]{3}\)\s*|[0-9]{3}\-)[0-9]{3}-[0-9]{4}$/;
-    var url = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
+    var url = /[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
     var email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var ipaddress = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     var date = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
@@ -235,42 +235,191 @@ function displayDataLists(wordlistsymbols)
 
 function removeCommonAdjectives(textclean)
 {
-  textclean = removeWords(textclean, adj_words); 
+  textclean = removeWords(textclean, adj_words);
   return textclean;
 }
 
 function removeCommonAdverbs(textclean)
 {
-  textclean = removeWords(textclean, adv_words); 
+  textclean = removeWords(textclean, adv_words);
+  return textclean;
+}
+
+function removeCommonVerbs(textclean)
+{
+  textclean = removeWords(textclean, verb_words);
   return textclean;
 }
 
 // function for adding number of views
 function countViews(weblog){
+  var numviews = 0;
   numviews = (weblog.match(/GET/g) || []).length;
+  return numviews;
 }
 
-// function for displaying number of views once user hits the Numver of Views button
-function displayViews(){
-  output = "<table><tr><td>" + "Total number of views: " + "</td><td>" + numviews + "</td>";
-  document.getElementById("numViews").innerHTML = output;
-}
-
-//function that will add unique IP addresses to uniquevisitors[]. Duplicates will be excluded.
-function countVisitors(weblog){
-    var ipaddress = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    for (var i = 0;i<weblog.length;i++){
-      var twin = 0;                                   //0 if it is not a duplicate IP. 1 if it is
-      if(weblog[i].match(ipaddress)){
-        for(var j = 0;j<uniquevisitors.length;j++){
-          if (weblog[i] == uniquevisitors[j]){        //checks for duplcicate (possibly think about optimizing)
-            twin = 1;
+//function that will return unique IP addresses in uniquevisitors[]. Duplicates will be excluded.
+function getUniqueVisitors(weblog){
+    visitors = getVisitorsWithDuplicates(weblog);
+    visitors.sort();
+    uniquevisitors = [];
+    var old = "";
+    var count = 0;
+    for (var i = 0;i<visitors.length;i++){
+      if (visitors[i]) {
+        if (visitors[i] != old) {
+          if ((old.length>0)
+            && (old.charCodeAt(0) != 13)
+            && (old != "")) {
+              uniquevisitors.push(old);
           }
+          count = 1;
         }
-        if (twin == 0){
-            uniquevisitors.push(weblog[i]);
+        else {
+          count = count + 1;
         }
+        old = visitors[i];
+
       }
+      else {
+      }
+      if (i == visitors.length - 1){
+        uniquevisitors.push(visitors[i]);
+      }
+    }
+    return uniquevisitors;
+}
+
+
+/*
+    This function will return an array of every ip address including duplcicates
+*/
+function getVisitorsWithDuplicates(weblog){
+    var ipaddress = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    var visitors = [];
+    for (var i = 0;i<weblog.length;i++){
+      if (weblog[i].match(ipaddress)){
+        visitors.push(weblog[i])
+      }
+    }
+    return visitors;
+}
+
+/*
+   The function pageAccessCount() will use the same code that counts words in the keywords program to sort by view count
+*/
+function pageAccessCount(weblog){
+  pages = getPages(weblog);
+  pages.sort();
+  var count = 1;
+  var old = "";
+  var sorted_pages = [];
+  for (var i=0;i<pages.length;i++) {
+    if (pages[i].length>0) {
+      if (pages[i] != old) {
+        if ((old.length>0)
+          && (old.charCodeAt(0) != 13)
+          && (old != "")) {
+            sorted_pages.push(count.toString()+" "+old);
+        }
+        count = 1;
+      }
+      else {
+        count = count + 1;
+      }
+      old = pages[i];
+
+    }
+    else {
+    }
+    if (count == 1 && i == pages.length - 1){
+      sorted_pages.push(count.toString()+" "+old);
+    }
+  }
+  sorted_pages.sort(customSort);
+  sorted_pages.reverse();
+  return sorted_pages;
+}
+
+/*
+   The function getPages() will return a list of all web addresses that were accessed, including Duplicates
+   Takes a weblog that has been split at the spaces as a parameter
+*/
+function getPages(weblog){
+  var url = /[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
+  pages = [];
+  for (var i = 0; i<weblog.length;i++){
+    if(weblog[i].match(url)){
+      pages.push(weblog[i]);
+    }
+  }
+  return pages;
+}
+
+/*
+  Uses previous functions getPages() and countUniqueVisitors() to find the average pages per visit
+*/
+
+function averagePagePerVisit(weblog){
+  visits = getPages(weblog);
+  uniquevisitors = getUniqueVisitors(weblog);
+  average = pages.length/uniquevisitors.length;
+  return average;
+}
+
+function maximumPagesPerVisit(weblog){
+  visitors = getVisitorsWithDuplicates(weblog);
+  visitors.sort();
+  var count = 1;
+  var max = 1;
+  var old= "";
+  for (var i = 0;i<visitors.length;i++){
+    if (visitors[i]) {
+      if (visitors[i] != old) {
+        if (count > max){
+          max = count;
+        }
+        count = 1;
+      }
+      else {
+        count = count + 1;
+      }
+      old = visitors[i];
+
+    }
+    else {
+    }
+    if (i == visitors.length - 1){
+      if (count > max){
+        max = count;
+      }
+    }
+  }
+  console.log(max);
+  return max;
+}
+
+function getVisits(weblog){
+    weblog.sort();
+    var ipaddress = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    var visits = [];
+    enterTimeStamp = "";
+    exitTimeStamp = "";
+    old = "";
+    currentip = "";
+
+    current_line = weblog[0].split(" ");
+    currentip = currentline[0];
+    enterTimeStamp = currentline[3];
+    enterTimeStamp = enterTimeStamp
+    for (var i = 0;i<weblog.length;i++){
+      current_line = weblog[i].split(" ");
+      if (current_line[1] != currentip){
+        exitTimeStamp = old[3];
+        timedifference = exitTimeStamp
+        currentip = current_line[0];
+      }
+      old = current_line;
     }
 }
 
@@ -296,7 +445,43 @@ function getUniquePageViews(weblog)
   document.getElementById("unique_pages").innerHTML = output;
 }
 
-function displayUniqueVisitorCount(){
+// function for displaying number of views once user hits the Numver of Views button
+function displayViews(numviews){
+  output = "<table><tr><td>" + "Total number of views: " + "</td><td>" + numviews + "</td>";
+  document.getElementById("numViews").innerHTML = output;
+}
+
+function displayUniqueVisitorCount(uniquevisitors){
   output = "<table><tr><td>" + "Number of unique vistors: " + "</td><td>" + uniquevisitors.length + "</td>";
   document.getElementById("unique_visitor_count").innerHTML = output;
+}
+
+function displayPageAccessCount(sorted_pages){
+  conceptlist = "<table>";
+  for(i=0;i<sorted_pages.length;i++){
+    printable = sorted_pages[i].split(" ");
+    conceptlist += "<tr><td>"
+          +printable[0]
+          +"</td><td>"
+          +printable[1]
+          +"</td><td>";
+  }
+  conceptlist += "</table>";
+  document.getElementById("page_access_count").innerHTML = conceptlist;
+}
+
+function displayAveragePagePerVisit(average){
+  average = average.toFixed(4);
+  output = "<table><tr><td>" + "Average number of pages per visit: " + "</td><td>" + average + "</td>";
+  document.getElementById("average_pages_per_visit").innerHTML = output;
+}
+
+function displayMaximumPagesPerVisit(max){
+  output = "<table><tr><td>" + "Maxmimum Pages Per Visit: " + "</td><td>" + max + "</td>";
+  document.getElementById("maximum_pages_per_visit").innerHTML = output;
+}
+
+var customSort = function (a, b) {
+    return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));
+
 }
