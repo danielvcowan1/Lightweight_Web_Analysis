@@ -25,6 +25,9 @@
           countVisitors(separateIPs);
           displayUniqueVisitorCount();  
         }
+        if (document.getElementById("uniquePageView").checked == true){ 
+          getUniquePageViews(textclean); 
+        }
       }
 
 
@@ -43,9 +46,11 @@
         </button>
         <input type="checkbox" id="totalPageViews">Total Page Views </input> <!--i changed total page views / visitor count to checkboxes to make it easier to use -->
         <input type="checkbox" id="uniqueVisitorCount">Unique Visitor Count </input>
+        <input type="checkbox" id="uniquePageView">Unique Pages Count </input>
       </td><td style="vertical-align:top;">
         <p id="numViews">
         <p id="unique_visitor_count">
+        <p id="unique_pages">
       </td>
     </table>
   </body>

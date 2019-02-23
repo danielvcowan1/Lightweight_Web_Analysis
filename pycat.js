@@ -274,6 +274,28 @@ function countVisitors(weblog){
     }
 }
 
+function getUniquePageViews(weblog)
+{
+
+  var lines = weblog.split(/"(.*?)"/); 
+  var i;
+  var website_arr = []; 
+
+ /*
+ * i split the data up by double commas in order to get the website.
+ * the website of each request starts in the third position of the array,
+ * and then every 6 spots afterwards, hence the i = 3 and i = i +6
+ */ 
+  for(i =3; i < lines.length ; i = i + 6)
+  {
+    website_arr.push(lines[i]);  
+  }
+
+  var no_duplicates = [...new Set(website_arr)]; //technique to get rid of duplicates in an array
+  output = "<table><tr><td>" + "Number of unique pages viewed: " + "</td><td>" + no_duplicates.length + "</td>";
+  document.getElementById("unique_pages").innerHTML = output;
+}
+
 function displayUniqueVisitorCount(){
   output = "<table><tr><td>" + "Number of unique vistors: " + "</td><td>" + uniquevisitors.length + "</td>";
   document.getElementById("unique_visitor_count").innerHTML = output;
