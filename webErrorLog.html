@@ -18,8 +18,8 @@
         * and process the text without it adding onto old data.
         */
         if (document.getElementById("totalPageViews").checked == true){
-          countViews(textinput);
-          displayViews();
+          result = countViews(textinput);
+          displayViews(result);
         }
         if (document.getElementById("uniqueVisitorCount").checked == true){
           result = getUniqueVisitors(separate_text);
