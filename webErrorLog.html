@@ -21,6 +21,13 @@
           countViews(textinput);
           displayViews();
         }
+        if (document.getElementById("uniqueVisitorCount").checked == true){
+          result = getUniqueVisitors(separate_text);
+          displayUniqueVisitorCount(result);
+        }
+        if (document.getElementById("uniquePageView").checked == true){ 
+          getUniquePageViews(textclean); 
+        }
       }
 
 
@@ -37,9 +44,16 @@
         <button type="button"
           onclick="displayResult()">Process Text
         </button>
+        <br>
         <input type="checkbox" id="totalPageViews">Total Page Views </input>
-      </td><td style="vertical-align:top;">
+        <br>
+        <input type="checkbox" id="uniqueVisitorCount">Unique Visitor Count </input>
+        <br>
+        <input type="checkbox" id="uniquePageView">Unique Pages Count </input>
+        </td><td style="vertical-align:top;">
         <p id="numViews">
+        <p id="unique_visitor_count">
+        <p id="unique_pages">
       </td>
     </table>
   </body>
