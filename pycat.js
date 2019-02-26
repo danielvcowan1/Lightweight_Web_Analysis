@@ -41,6 +41,17 @@ function removeWords(textclean, textcleanremoved){
 
 function getDataLists(wordlistsymbols){
 
+  //emptying the arrays here so that any old data lists are removed
+  hashtaglist = []; 
+  mentionslist = []; 
+  phonenumberslist = []; 
+  urlslist = []; 
+  emailslist = [];
+  ipaddresslist = []; 
+  dateslist = [];
+  timeslist = [];
+  currencylist = []; 
+
   for (i=0;i<wordlistsymbols.length;i++) {
     var phonenumber = /^(\([0-9]{3}\)\s*|[0-9]{3}\-)[0-9]{3}-[0-9]{4}$/;
     var url = /[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
@@ -229,7 +240,7 @@ function displayDataLists(wordlistsymbols)
   		}
       console.log(output);
   		output += "</table>";
-      output = removeCommas(output);
+      output = removeCommas(output); 
   		document.getElementById("dlists").innerHTML = output;
 }
 
