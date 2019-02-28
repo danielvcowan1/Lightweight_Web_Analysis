@@ -378,36 +378,50 @@ function averagePagePerVisit(weblog, visit_text){
   return average;
 }
 
-function maximumPagesPerVisit(weblog){
-  visitors = getVisitorsWithDuplicates(weblog);
-  visitors.sort();
-  var count = 1;
-  var max = 1;
-  var old= "";
-  for (var i = 0;i<visitors.length;i++){
-    if (visitors[i]) {
-      if (visitors[i] != old) {
-        if (count > max){
-          max = count;
-        }
-        count = 1;
-      }
-      else {
-        count = count + 1;
-      }
-      old = visitors[i];
+/* maximumPagesPerVisit() will return the max number of pages that were visited in a single visit.
+    Uses the same process as countVisits()
+*/
 
+function maximumPagesPerVisit(weblog){
+  weblog.sort();
+  var pages = 0;
+  var maxpages = 0;
+  var ip = "";
+  var oldip = "";
+  var new_timestamp = "";
+  var old_timestamp = "";
+  var timestamp_difference = 0;
+  var minutes = 0;
+  var date = "";
+  var time = "";
+  
+  for (var i = 0; i<weblog.length;i++){
+    line = weblog[i].split(" ");
+    ip = line[0];
+    if (ip == oldip){
+      pages++;
+      new_timestamp = line[3];
+      new_timestamp = new_timestamp.substring(1);
+      date = new_timestamp.substring(0, 11);
+      time = new_timestamp.substring(12, 20);
+      new_timestamp = new Date(date + " " + time);
+      timestamp_difference = old_timestamp - new_timestamp;
+      minutes = Math.floor(timestamp_difference / 60) % 60;
+      if (minutes > 30){
+        pages = 1;
+      } 
     }
     else {
+      pages = 1;
     }
-    if (i == visitors.length - 1){
-      if (count > max){
-        max = count;
-      }
+    oldip = ip;
+    old_timestamp = new_timestamp
+
+    if (pages > maxpages){
+      maxpages = pages;
     }
   }
-  console.log(max);
-  return max;
+  return maxpages;
 }
 
 /* The function countVisits() will count the number of times that either a new ipaddress accesses the site or

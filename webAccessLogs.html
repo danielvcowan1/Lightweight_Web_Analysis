@@ -32,7 +32,8 @@
           displayAveragePagePerVisit(result);
         }
         if (document.getElementById("maximumPagesPerVisit").checked == true){
-          result = maximumPagesPerVisit(separate_text);
+          visit_text = textinput.split("\n"); //have to split line by line for this
+          result = maximumPagesPerVisit(visit_text);
           displayMaximumPagesPerVisit(result);
         }
         if (document.getElementById("countVisits").checked == true){
@@ -55,13 +56,19 @@
         <textarea id="myTextarea" rows="20" cols="40"></textarea>
         <br/>
         <input type="checkbox" id="totalPageViews">Total Page Views </input> <!--i changed total page views / visitor count to checkboxes to make it easier to use -->
+        <br>
         <input type="checkbox" id="uniqueVisitorCount">Unique Visitor Count </input>
         <br>
         <input type='checkbox' id="pageAccessCount">Page Access Count</input>
+        <br>
         <input type="checkbox" id="uniquePageView">Unique Pages Count </input>
+        <br>
+        <input type='checkbox' id="countVisits">Count Visits</input> 
         <br/>
         <input type='checkbox' id="averagePagePerVisit">Average Pages Per Visit</input>
+        <br>
         <input type='checkbox' id="maximumPagesPerVisit">Maximum Pages Per Visit</input>
+        <br>
         <input type='checkbox' id="countVisits">Count Visits</input> 
         <br/>
         <button type="button"
@@ -71,9 +78,9 @@
         <p id="numViews">
         <p id="unique_visitor_count">
         <p id="unique_pages">
+        <p id="count_visits">
         <p id="average_pages_per_visit">
         <p id="maximum_pages_per_visit">
-        <p id="count_visits">
         <p id="page_access_count">
       </td>
     </table>
