@@ -368,13 +368,13 @@ function getPages(weblog){
 }
 
 /*
-  Uses previous functions getPages() and countUniqueVisitors() to find the average pages per visit
+  Uses previous functions getPages() and countVisits() to find the average pages per visit
 */
 
-function averagePagePerVisit(weblog){
-  visits = getPages(weblog);
-  uniquevisitors = getUniqueVisitors(weblog);
-  average = pages.length/uniquevisitors.length;
+function averagePagePerVisit(weblog, visit_text){
+  pageCount = getPages(weblog);
+  visits = countVisits(visit_text);
+  average = pages.length/visits;
   return average;
 }
 
@@ -410,28 +410,52 @@ function maximumPagesPerVisit(weblog){
   return max;
 }
 
-function getVisits(weblog){
-    weblog.sort();
-    var ipaddress = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    var visits = [];
-    enterTimeStamp = "";
-    exitTimeStamp = "";
-    old = "";
-    currentip = "";
+/* The function countVisits() will count the number of times that either a new ipaddress accesses the site or
+   a past visitor return after a length of over 30 minutes.
+   */
 
-    current_line = weblog[0].split(" ");
-    currentip = currentline[0];
-    enterTimeStamp = currentline[3];
-    enterTimeStamp = enterTimeStamp
-    for (var i = 0;i<weblog.length;i++){
-      current_line = weblog[i].split(" ");
-      if (current_line[1] != currentip){
-        exitTimeStamp = old[3];
-        timedifference = exitTimeStamp
-        currentip = current_line[0];
+function countVisits(weblog){
+    weblog.sort();
+    var visits = 0;
+    var ip = "";
+    var oldip = "";
+    var new_timestamp = "";
+    var old_timestamp = "";
+    var timestamp_difference = 0;
+    var minutes = 0;
+    var date = "";
+    var time = "";
+    
+    /* for loop explanation
+        
+        the following code will loop through every entry in the sorted web access log. Each entry will be split by spaces.
+        The ipaddress will be extracted. If the ip has changed then the visit count will be raised on one. If it is the
+        same then we must compare the timestamps. The timestamp is extracted and it must be reformatted to perform 
+        timestamp subtraction. If the amount of minutes is greater than 30, the visit count is increased by 1.
+    */
+
+    for (var i = 0; i<weblog.length;i++){
+      line = weblog[i].split(" ");
+      ip = line[0];
+      if (ip == oldip){
+        new_timestamp = line[3];
+        new_timestamp = new_timestamp.substring(1);
+        date = new_timestamp.substring(0, 11);
+        time = new_timestamp.substring(12, 20);
+        new_timestamp = new Date(date + " " + time);
+        timestamp_difference = old_timestamp - new_timestamp;
+        minutes = Math.floor(timestamp_difference / 60) % 60;
+        if (minutes > 30){
+          visits = visits + 1;
+        } 
       }
-      old = current_line;
+      else {
+        visits = visits + 1;
+      }
+      oldip = ip;
+      old_timestamp = new_timestamp
     }
+    return visits;
 }
 
 function getUniquePageViews(weblog)
@@ -455,6 +479,18 @@ function getUniquePageViews(weblog)
   output = "<table><tr><td>" + "Number of unique pages viewed: " + "</td><td>" + no_duplicates.length + "</td>";
   document.getElementById("unique_pages").innerHTML = output;
 }
+
+var customSort = function (a, b) {
+  return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));
+
+}
+
+/*
+  DISPLAY FUNCTIONS BELOW HERE
+  ||||||||||||||||||||||||||||
+  vvvvvvvvvvvvvvvvvvvvvvvvvvvv
+*/
+
 
 // function for displaying number of views once user hits the Numver of Views button
 function displayViews(numviews){
@@ -492,7 +528,8 @@ function displayMaximumPagesPerVisit(max){
   document.getElementById("maximum_pages_per_visit").innerHTML = output;
 }
 
-var customSort = function (a, b) {
-    return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));
-
+function displayVisits(visit_count){
+  output = "<table><tr><td>" + "Visit Count: " + "</td><td>" + visit_count + "</td>";
+  document.getElementById("count_visits").innerHTML = output;
 }
+

@@ -27,7 +27,8 @@
           displayPageAccessCount(result);
         }
         if (document.getElementById("averagePagePerVisit").checked == true){
-          result = averagePagePerVisit(separate_text);
+          visit_text = textinput.split("\n"); //have to split line by line for this
+          result = averagePagePerVisit(separate_text, visit_text);
           displayAveragePagePerVisit(result);
         }
         if (document.getElementById("maximumPagesPerVisit").checked == true){
@@ -35,9 +36,9 @@
           displayMaximumPagesPerVisit(result);
         }
         if (document.getElementById("countVisits").checked == true){
-          visit_text = textclean.split("\n"); //have to split line by line for this
-          result = getVisits(separate_text);
-          displayMaximumPagesPerVisit(result);
+          visit_text = textinput.split("\n"); //have to split line by line for this
+          result = countVisits(visit_text);
+          displayVisits(result);
         }
         if (document.getElementById("uniquePageView").checked == true){ 
           getUniquePageViews(textclean); 
