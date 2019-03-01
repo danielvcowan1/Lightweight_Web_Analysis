@@ -499,6 +499,32 @@ var customSort = function (a, b) {
 
 }
 
+function getBounce(weblog){
+  num_visits = countVisits(weblog);
+  weblog.sort();
+  var ip = "";
+  var oldip = "";
+  var count = 0;
+  var one_visit_count = 0;
+
+  for (var i = 0;i<weblog.length;i++){
+    line = weblog[i].split(" ");
+    ip = line[0];
+    if (ip != oldip && count == 1){
+      one_visit_count = one_visit_count + 1;
+      count = 0;
+    }
+    else if(ip != oldip){
+      count = 0;
+    }
+    oldip = ip;
+    count = count + 1;
+  }
+  console.log(one_visit_count);
+  console.log(num_visits);
+  return one_visit_count/num_visits;
+}
+
 /*
   DISPLAY FUNCTIONS BELOW HERE
   ||||||||||||||||||||||||||||
@@ -544,6 +570,11 @@ function displayMaximumPagesPerVisit(max){
 
 function displayVisits(visit_count){
   output = "<table><tr><td>" + "Visit Count: " + "</td><td>" + visit_count + "</td>";
+  document.getElementById("count_visits").innerHTML = output;
+}
+
+function displayBounce(bounce_rate){
+  output = "<table><tr><td>" + "Bounce Rate: " + "</td><td>" + bounce_rate + "</td>";
   document.getElementById("count_visits").innerHTML = output;
 }
 
