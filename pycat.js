@@ -154,6 +154,17 @@ intext = intext.replace(/\n/g," ");
 return intext;
 }
 
+function removeBracket(intext)
+{
+  for (var i=0;i<intext.length;i++){
+    str = intext[i];
+    str = str.replace(/\]/g,'');
+    str = str.replace(/\[/g,'');
+    intext[i] = str
+  }
+  return intext;
+}
+
 function lower(intext)
 {
 return intext.toLowerCase();
@@ -472,6 +483,13 @@ function countVisits(weblog){
     return visits;
 }
 
+function getUniquePageErrorlog(weblog){
+  var website_arr = getPages(weblog);
+  var no_duplicates = [...new Set(website_arr)];
+  output = "<table><tr><td>" + "Number of unique page errors: " + "</td><td>" + no_duplicates.length + "</td>";
+  document.getElementById("unique_pages").innerHTML = output;
+}
+
 function getUniquePageViews(weblog)
 {
 
@@ -536,6 +554,11 @@ function getBounce(weblog){
 function displayViews(numviews){
   output = "<table><tr><td>" + "Total number of views: " + "</td><td>" + numviews + "</td>";
   document.getElementById("numViews").innerHTML = output;
+}
+
+function displayErrors(numErrors){
+  output = "<table><tr><td>" + "Total number of errors: " + "</td><td>" + numErrors + "</td>";
+  document.getElementById("numErrors").innerHTML = output;
 }
 
 function displayUniqueVisitorCount(uniquevisitors){

@@ -3,7 +3,7 @@
     <script type="text/javascript" src="pycat.js"></script>
     <script type="text/javascript">
 
-    numviews = 0; // globally stores total number of views
+    numErrors = 0; // globally stores total number of views
     uniquevisitors = [];
 
       function displayResult(){
@@ -17,16 +17,20 @@
         * adding it to the old count doesn't work - we need to be able to paste in a new web access log
         * and process the text without it adding onto old data.
         */
-        if (document.getElementById("totalPageViews").checked == true){
-          result = countViews(textinput);
-          displayViews(result);
+        if (document.getElementById("totalPageErrors").checked == true){
+          result = removeBracket(separate_text);
+          result = getVisitorsWithDuplicates(separate_text);
+          numErrors = result.length;
+          displayErrors(numErrors);
         }
         if (document.getElementById("uniqueVisitorCount").checked == true){
+          result = removeBracket(separate_text);
           result = getUniqueVisitors(separate_text);
           displayUniqueVisitorCount(result);
         }
-        if (document.getElementById("uniquePageView").checked == true){ 
-          getUniquePageViews(textclean); 
+        if (document.getElementById("uniquePageErrors").checked == true){ 
+          result = removeBracket(separate_text);
+          getUniquePageErrorlog(result); 
         }
       }
 
@@ -45,13 +49,13 @@
           onclick="displayResult()">Process Text
         </button>
         <br>
-        <input type="checkbox" id="totalPageViews">Total Page Views </input>
+        <input type="checkbox" id="totalPageErrors">Total Page Errors </input>
         <br>
         <input type="checkbox" id="uniqueVisitorCount">Unique Visitor Count </input>
         <br>
-        <input type="checkbox" id="uniquePageView">Unique Pages Count </input>
+        <input type="checkbox" id="uniquePageErrors">Unique Errors Count </input>
         </td><td style="vertical-align:top;">
-        <p id="numViews">
+        <p id="numErrors">
         <p id="unique_visitor_count">
         <p id="unique_pages">
       </td>
