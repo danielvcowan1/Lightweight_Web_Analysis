@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<script type="text/javascript" src="pycat.js"></script>
+	<script type="text/javascript">
+		function displayResult(){
+			var textinput;
+
+			textinput = document.getElementById("myTextarea").value;
+
+			textclean = prepare(textinput);
+			textclean = lower(textclean);
+
+			textclean = textclean.split("<");
+
+      if (document.getElementById("totalTags").checked == true){
+        let totalTags = getListOfTags(textclean);
+        displayTotalTags(totalTags.length);
+      }
+      if (document.getElementById("startAndEndTags").checked == true){
+        let startsAndEnds = getStartsAndEnds(textclean);
+        displayStartsAndEnds(startsAndEnds);
+
+      }
+      if(document.getElementById("tagsWithoutEnd").checked == true){
+        let tagsWithoutEnd = getTotalTagsWithoutEnd(textclean);
+        displayTotalTagsWithoutEnd(tagsWithoutEnd);
+      }
+		}
+	</script>
+</head>
+<body>
+	<H2>HTML ANALYSIS TOOL</H2>
+	<table>
+	<tr><td style="vertical-align:top;">
+    	<P>Copy and paste your html into the text box<br/>
+    	and press <i>process text</i></P>
+    	<textarea id="myTextarea" rows="20" cols="40"></textarea>
+    	<br/>
+	    <button type="button"
+	    	onclick="displayResult()">Process Text
+    	</button>
+      <input type="checkbox" id="totalTags">Total Tags </input>
+      <br>
+      <input type="checkbox" id="startAndEndTags">Number of start and end tags </input>
+      <br>
+      <input type="checkbox" id="tagsWithoutEnd">Tags Without End </input>
+      <br>
+    </td><td style="vertical-align:top;">
+      <p id="totalTagsDisplay">
+      <p id="startsAndEndsDisplay">
+      <p id="tagsWithoutEndDisplay">
+    </td>
+	</table>
+</body>
+</html>

@@ -42,15 +42,15 @@ function removeWords(textclean, textcleanremoved){
 function getDataLists(wordlistsymbols){
 
   //emptying the arrays here so that any old data lists are removed
-  hashtaglist = []; 
-  mentionslist = []; 
-  phonenumberslist = []; 
-  urlslist = []; 
+  hashtaglist = [];
+  mentionslist = [];
+  phonenumberslist = [];
+  urlslist = [];
   emailslist = [];
-  ipaddresslist = []; 
+  ipaddresslist = [];
   dateslist = [];
   timeslist = [];
-  currencylist = []; 
+  currencylist = [];
 
   for (i=0;i<wordlistsymbols.length;i++) {
     var phonenumber = /^(\([0-9]{3}\)\s*|[0-9]{3}\-)[0-9]{3}-[0-9]{4}$/;
@@ -240,7 +240,7 @@ function displayDataLists(wordlistsymbols)
   		}
       console.log(output);
   		output += "</table>";
-      output = removeCommas(output); 
+      output = removeCommas(output);
   		document.getElementById("dlists").innerHTML = output;
 }
 
@@ -394,7 +394,7 @@ function maximumPagesPerVisit(weblog){
   var minutes = 0;
   var date = "";
   var time = "";
-  
+
   for (var i = 0; i<weblog.length;i++){
     line = weblog[i].split(" ");
     ip = line[0];
@@ -409,7 +409,7 @@ function maximumPagesPerVisit(weblog){
       minutes = Math.floor(timestamp_difference / 60) % 60;
       if (minutes > 30){
         pages = 1;
-      } 
+      }
     }
     else {
       pages = 1;
@@ -439,12 +439,12 @@ function countVisits(weblog){
     var minutes = 0;
     var date = "";
     var time = "";
-    
+
     /* for loop explanation
-        
+
         the following code will loop through every entry in the sorted web access log. Each entry will be split by spaces.
         The ipaddress will be extracted. If the ip has changed then the visit count will be raised on one. If it is the
-        same then we must compare the timestamps. The timestamp is extracted and it must be reformatted to perform 
+        same then we must compare the timestamps. The timestamp is extracted and it must be reformatted to perform
         timestamp subtraction. If the amount of minutes is greater than 30, the visit count is increased by 1.
     */
 
@@ -461,7 +461,7 @@ function countVisits(weblog){
         minutes = Math.floor(timestamp_difference / 60) % 60;
         if (minutes > 30){
           visits = visits + 1;
-        } 
+        }
       }
       else {
         visits = visits + 1;
@@ -475,18 +475,18 @@ function countVisits(weblog){
 function getUniquePageViews(weblog)
 {
 
-  var lines = weblog.split(/"(.*?)"/); 
+  var lines = weblog.split(/"(.*?)"/);
   var i;
-  var website_arr = []; 
+  var website_arr = [];
 
  /*
  * i split the data up by double commas in order to get the website.
  * the website of each request starts in the third position of the array,
  * and then every 6 spots afterwards, hence the i = 3 and i = i +6
- */ 
+ */
   for(i =3; i < lines.length ; i = i + 6)
   {
-    website_arr.push(lines[i]);  
+    website_arr.push(lines[i]);
   }
 
   var no_duplicates = [...new Set(website_arr)]; //technique to get rid of duplicates in an array
@@ -525,13 +525,75 @@ function getBounce(weblog){
   return one_visit_count/num_visits;
 }
 
+function getTotalTagsWithoutEnd(parsed_html){
+  let tagList = getListOfTags(parsed_html);
+  var tag = /^\//;
+  let x = [];
+  let tagsMissingEnd = [];
+  for (let i = 0;i<tagList.length;i++){
+    if(tagList[i].match(tag)){
+      let start_tag = x.pop();
+      let end_tag = tagList[i].substring(1);
+      while (start_tag != end_tag && x.length != 0){
+        tagsMissingEnd.push(start_tag);
+        start_tag = x.pop();
+      }
+    }
+    else {
+      x.push(tagList[i]);
+    }
+  }
+  return tagsMissingEnd;
+}
+
+function getListOfTags(parsed_html){
+  x = [];
+  for (let i = 0;i<parsed_html.length;i++){
+    let subs = parsed_html[i].substring(0, parsed_html[i].indexOf('>'));
+    let subss = subs.split(" ");
+    subss = subss[0];
+    x.push(subss);
+  }
+  return x;
+}
+
+function getStartsAndEnds(parsed_html){
+  let tagList = getListOfTags(parsed_html);
+  var tag = /^\//;
+  let x = [0, 0];
+  for (let i = 0;i< tagList.length; i++){
+    if (tagList[i].match(tag)){
+      x[1]++;
+    }
+    else{
+      x[0]++;
+    }
+  }
+  console.log(x);
+  return x;
+}
+
 /*
   DISPLAY FUNCTIONS BELOW HERE
   ||||||||||||||||||||||||||||
   vvvvvvvvvvvvvvvvvvvvvvvvvvvv
 */
 
+function displayStartsAndEnds(startsAndEnds){
+  output = "<table><tr><td>" + "Total number of starts: " + "</td><td>" + startsAndEnds[0] + "</td>";
+  output = output + "<table><tr><td>" + "Total number of ends: " + "</td><td>" + startsAndEnds[1] + "</td>";
+  document.getElementById("startsAndEndsDisplay").innerHTML = output;
+}
 
+function displayTotalTagsWithoutEnd(tagsWithoutEnd){
+  output = "<table><tr><td>" + "Tags without ends: " + "</td><td>" + tagsWithoutEnd + "</td>";
+  document.getElementById("tagsWithoutEndDisplay").innerHTML = output;
+}
+
+function displayTotalTags(totalTags){
+  output = "<table><tr><td>" + "Total number of tags: " + "</td><td>" + totalTags + "</td>";
+  document.getElementById("totalTagsDisplay").innerHTML = output;
+}
 // function for displaying number of views once user hits the Numver of Views button
 function displayViews(numviews){
   output = "<table><tr><td>" + "Total number of views: " + "</td><td>" + numviews + "</td>";
@@ -577,4 +639,3 @@ function displayBounce(bounce_rate){
   output = "<table><tr><td>" + "Bounce Rate: " + "</td><td>" + bounce_rate + "</td>";
   document.getElementById("count_visits").innerHTML = output;
 }
-
