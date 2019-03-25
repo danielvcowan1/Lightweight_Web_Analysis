@@ -6,8 +6,7 @@
       function displayResult(){
         	textinput = document.getElementById("myTextarea").value;
 
-          textclean = prepare(textinput);
-          separate_text = textclean.split(" ");
+          separate_text = textinput.split("\n");
         /*
         * I changed around some of the functionality of display result.
         * it starts a fresh count of total page views each time.
@@ -27,27 +26,24 @@
           displayPageAccessCount(result);
         }
         if (document.getElementById("averagePagePerVisit").checked == true){
-          visit_text = textinput.split("\n"); //have to split line by line for this
-          result = averagePagePerVisit(separate_text, visit_text);
+          visit_text = textinput.split(" "); //have to split by space for this one
+          result = averagePagePerVisit(separate_text);
           displayAveragePagePerVisit(result);
         }
         if (document.getElementById("maximumPagesPerVisit").checked == true){
-          visit_text = textinput.split("\n"); //have to split line by line for this
-          result = maximumPagesPerVisit(visit_text);
+          result = maximumPagesPerVisit(separate_text);
           displayMaximumPagesPerVisit(result);
         }
         if (document.getElementById("countVisits").checked == true){
-          visit_text = textinput.split("\n"); //have to split line by line for this
-          result = countVisits(visit_text);
+          result = countVisits(separate_text);
           displayVisits(result);
         }
-        if (document.getElementById("uniquePageView").checked == true){ 
-          getUniquePageViews(textclean); 
+        if (document.getElementById("uniquePageView").checked == true){
+          getUniquePageViews(separate_text);
         }
-        if (document.getElementById("bounce").checked == true){ 
-          visit_text = textinput.split("\n"); //have to split line by line for this
-          result = getBounce(visit_text);
-          displayBounce(result); 
+        if (document.getElementById("bounce").checked == true){
+          result = getBounce(separate_text);
+          displayBounce(result);
         }
       }
     </script>
@@ -68,17 +64,17 @@
         <br>
         <input type="checkbox" id="uniquePageView">Unique Pages Count </input>
         <br>
-        <input type='checkbox' id="countVisits">Count Visits</input> 
+        <input type='checkbox' id="countVisits">Count Visits</input>
         <br/>
         <input type='checkbox' id="averagePagePerVisit">Average Pages Per Visit</input>
         <br>
         <input type='checkbox' id="maximumPagesPerVisit">Maximum Pages Per Visit</input>
         <br>
-        <input type='checkbox' id="bounce">Bounce</input> 
+        <input type='checkbox' id="bounce">Bounce</input>
         <br/>
         <button type="button"
           onclick="displayResult()">Process Text
-        </button>    
+        </button>
       </td><td style="vertical-align:top;">
         <p id="numViews">
         <p id="unique_visitor_count">
@@ -86,8 +82,8 @@
         <p id="count_visits">
         <p id="average_pages_per_visit">
         <p id="maximum_pages_per_visit">
+        <p id="bouncedisplay"></p>
         <p id="page_access_count">
-        <p id="bounce"></p>
       </td>
     </table>
   </body>

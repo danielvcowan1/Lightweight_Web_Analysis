@@ -317,12 +317,10 @@ function getUniqueVisitors(weblog){
     This function will return an array of every ip address including duplcicates
 */
 function getVisitorsWithDuplicates(weblog){
-    var ipaddress = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    var visitors = [];
+    let visitors = [];
     for (var i = 0;i<weblog.length;i++){
-      if (weblog[i].match(ipaddress)){
-        visitors.push(weblog[i])
-      }
+      let split_entry = weblog[i].split(" ");
+      visitors.push(split_entry[0])
     }
     return visitors;
 }
@@ -354,7 +352,7 @@ function pageAccessCount(weblog){
     }
     else {
     }
-    if (count == 1 && i == pages.length - 1){
+    if (i == pages.length - 1){
       sorted_pages.push(count.toString()+" "+old);
     }
   }
@@ -368,11 +366,16 @@ function pageAccessCount(weblog){
    Takes a weblog that has been split at the spaces as a parameter
 */
 function getPages(weblog){
-  var url = /[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
   pages = [];
-  for (var i = 0; i<weblog.length;i++){
-    if(weblog[i].match(url)){
-      pages.push(weblog[i]);
+  for (let i = 0; i<weblog.length;i++){
+    let split_entry = weblog[i].split(" ");
+    if(split_entry[5] == "\"GET" && split_entry.length >= 11){
+      if (split_entry[10] != "\"-\""){
+        pages.push(split_entry[10].replace(/['"]+/g, ''));
+      }
+      else{
+        pages.push(split_entry[6]);
+      }
     }
   }
   return pages;
@@ -382,9 +385,9 @@ function getPages(weblog){
   Uses previous functions getPages() and countVisits() to find the average pages per visit
 */
 
-function averagePagePerVisit(weblog, visit_text){
+function averagePagePerVisit(weblog){
   pageCount = getPages(weblog);
-  visits = countVisits(visit_text);
+  visits = countVisits(weblog);
   average = pages.length/visits;
   return average;
 }
@@ -409,7 +412,7 @@ function maximumPagesPerVisit(weblog){
   for (var i = 0; i<weblog.length;i++){
     line = weblog[i].split(" ");
     ip = line[0];
-    if (ip == oldip){
+    if (ip == oldip && line.length >= 4){
       pages++;
       new_timestamp = line[3];
       new_timestamp = new_timestamp.substring(1);
@@ -462,7 +465,7 @@ function countVisits(weblog){
     for (var i = 0; i<weblog.length;i++){
       line = weblog[i].split(" ");
       ip = line[0];
-      if (ip == oldip){
+      if (ip == oldip && line.length >= 4){
         new_timestamp = line[3];
         new_timestamp = new_timestamp.substring(1);
         date = new_timestamp.substring(0, 11);
@@ -490,24 +493,21 @@ function getUniquePageErrorlog(weblog){
   document.getElementById("unique_pages").innerHTML = output;
 }
 
+
+//changed to fit new standards of the program. Now uses getPages function. -Matt
+
 function getUniquePageViews(weblog)
 {
 
-  var lines = weblog.split(/"(.*?)"/);
-  var i;
-  var website_arr = [];
+  let website_arr = getPages(weblog);
 
  /*
  * i split the data up by double commas in order to get the website.
  * the website of each request starts in the third position of the array,
  * and then every 6 spots afterwards, hence the i = 3 and i = i +6
  */
-  for(i =3; i < lines.length ; i = i + 6)
-  {
-    website_arr.push(lines[i]);
-  }
 
-  var no_duplicates = [...new Set(website_arr)]; //technique to get rid of duplicates in an array
+  let no_duplicates = [...new Set(website_arr)]; //technique to get rid of duplicates in an array
   output = "<table><tr><td>" + "Number of unique pages viewed: " + "</td><td>" + no_duplicates.length + "</td>";
   document.getElementById("unique_pages").innerHTML = output;
 }
@@ -591,6 +591,10 @@ function getStartsAndEnds(parsed_html){
   return x;
 }
 
+function createGraph(path){
+
+}
+
 /*
   DISPLAY FUNCTIONS BELOW HERE
   ||||||||||||||||||||||||||||
@@ -643,7 +647,7 @@ function displayPageAccessCount(sorted_pages){
 }
 
 function displayAveragePagePerVisit(average){
-  average = average.toFixed(4);
+  average = average.toFixed(1);
   output = "<table><tr><td>" + "Average number of pages per visit: " + "</td><td>" + average + "</td>";
   document.getElementById("average_pages_per_visit").innerHTML = output;
 }
@@ -659,6 +663,7 @@ function displayVisits(visit_count){
 }
 
 function displayBounce(bounce_rate){
+  bounce_rate = bounce_rate.toFixed(1);
   output = "<table><tr><td>" + "Bounce Rate: " + "</td><td>" + bounce_rate + "</td>";
-  document.getElementById("count_visits").innerHTML = output;
+  document.getElementById("bouncedisplay").innerHTML = output;
 }
