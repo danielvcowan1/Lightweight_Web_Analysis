@@ -1,0 +1,120 @@
+
+<html>
+  <head>
+    <script type="text/javascript">
+      function displayResult()
+      {
+      var textinput
+      var textlower
+      textinput = document.getElementById("myTextarea").value;
+      textlower = textinput.toLowerCase();
+      textclean = textlower.replace(/\n/g," ");
+
+      <!-- all symbols become spaces to tokenize everything -->
+      textclean = textclean.replace(/\./g," "); 
+      textclean = textclean.replace(/\,/g," ");
+      textclean = textclean.replace(/\"/g," ");
+      textclean = textclean.replace(/\'/g," ");
+      textclean = textclean.replace(/\+/g," ");
+      textclean = textclean.replace(/\(/g," ");
+      textclean = textclean.replace(/\)/g," ");
+      textclean = textclean.replace(/\//g," ");
+      textclean = textclean.replace(/\-/g," ");
+      textclean = textclean.replace(/\:/g," ");
+
+      <!-- remove all noise words -->
+      textclean = textclean.replace(/ and /g," ");
+      textclean = textclean.replace(/ or /g," ");
+      textclean = textclean.replace(/ a /g," ");
+      textclean = textclean.replace(/ an /g," ");
+      textclean = textclean.replace(/ the /g," ");
+      textclean = textclean.replace(/ your /g," ");
+      textclean = textclean.replace(/ to /g," ");
+      textclean = textclean.replace(/ which /g," ");
+      textclean = textclean.replace(/ of /g," ");
+      textclean = textclean.replace(/ is /g," ");
+      textclean = textclean.replace(/ in /g," ");
+      textclean = textclean.replace(/ on /g," ");
+
+      <!-- document.write("<p>"+textclean+"</p>"); -->
+
+      wordlist = textclean.split(" ");
+	  wordlist2=[];
+      <!-- document.write("<p>"+wordlist+"</p>"); -->
+      var i = 0;
+      var winsize = document.getElementById("windowSize").value;
+	  var end = winsize-1;
+	  document.write(winsize);
+	  var concp=[];
+	  for(i=0;i<wordlist.length-winsize;i++){
+		if((wordlist[i].length>0)){
+			for(var end=1;end<winsize;end++){
+				if(wordlist[i+end].length>0)concp.push(wordlist[i]+" "+wordlist[i+end]);
+			}
+		}
+
+	  }
+	concp.sort();
+	  var i = 0;
+      var count = 1;
+      var old = "";
+	  var sorted = [];
+
+      for (i=0;i<concp.length;i++) {
+	if (concp[i].length>0) {
+	  if (concp[i] != old) {
+	    if ((old.length>0) && (old.charCodeAt(0) != 13) && (old != "")) {
+			sorted.push(count.toString()+" "+old);	    
+            }
+	    count = 1;
+	  }
+          else {
+	    count = count + 1;
+	  }
+	old = concp[i];
+	}
+	else {
+	  <!--document.write("<p>xxx</p>"); -->
+	}
+      }
+      document.write("<table>");
+	  sorted.sort();
+	  sorted.reverse();
+     for (i=0;i<concp.length;i++) {
+		printable = sorted[i].split(" ");
+		document.write("<tr><td>"+printable[0]+"</td><td>"+printable[1]+" "+printable[2]+"</td><td>");
+		document.write("</td></tr>");
+	 }	 
+
+}
+ 
+    </script>
+  </head>
+  <body>
+
+    <P><B>SIMPLE CONTENT ANALYSIS v5</B></P>
+    <textarea id="myTextarea" rows="20" cols="40">
+    Copy and paste your data here and then press go for data analysis.
+    </textarea>
+    <br />
+    <P>Select Window Size
+	<select id="windowSize">
+	   <option value=3>3</option>
+	   <option value=4>4</option>
+	   <option value=5>5</option>
+	</select></P>
+    <button type="button" 
+	    onclick="displayResult()">Process text
+    </button>
+    
+  </body>
+</html>
+
+<!--
+take a look a jquery ui dialog for the result page.  you can put into modal mode and pop up the results without killing off the text page
+
+this way if the user wants to mod the data that don't have to repaste it each time.
+-->
+
+
+
