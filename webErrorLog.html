@@ -17,20 +17,21 @@
         * adding it to the old count doesn't work - we need to be able to paste in a new web access log
         * and process the text without it adding onto old data.
         */
-        if (document.getElementById("totalPageErrors").checked == true){
-          result = removeBracket(separate_text);
+      if (document.getElementById("totalPageErrors").checked == true){
+          result = removeBracket(separate_text);  
           result = getVisitorsWithDuplicates(separate_text);
           numErrors = result.length;
-          displayErrors(numErrors);
+          displayStats("numErrors", "Total number of errors: ", numErrors); 
         }
         if (document.getElementById("uniqueVisitorCount").checked == true){
           result = removeBracket(separate_text);
           result = getUniqueVisitors(separate_text);
-          displayUniqueVisitorCount(result);
+          displayStats("unique_visitor_count", "Number of unique vistors: ", result); 
         }
         if (document.getElementById("uniquePageErrors").checked == true){ 
           result = removeBracket(separate_text);
-          getUniquePageErrorlog(result); 
+          var num = getUniquePageErrorlog(result); 
+          displayStats("unique_pages", "Unique page errors: ", num); 
         }
       }
 
