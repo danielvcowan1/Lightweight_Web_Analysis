@@ -601,6 +601,37 @@ function createGraph(path){
   vvvvvvvvvvvvvvvvvvvvvvvvvvvv
 */
 
+function displayStartsAndEnds(startsAndEnds){
+  output = "<table><tr><td>" + "Total number of starts: " + "</td><td>" + startsAndEnds[0] + "</td>";
+  output = output + "<table><tr><td>" + "Total number of ends: " + "</td><td>" + startsAndEnds[1] + "</td>";
+  document.getElementById("startsAndEndsDisplay").innerHTML = output;
+}
+
+function displayTotalTagsWithoutEnd(tagsWithoutEnd){
+  output = "<table><tr><td>" + "Tags without ends: " + "</td><td>" + tagsWithoutEnd + "</td>";
+  document.getElementById("tagsWithoutEndDisplay").innerHTML = output;
+}
+
+function displayTotalTags(totalTags){
+  output = "<table><tr><td>" + "Total number of tags: " + "</td><td>" + totalTags + "</td>";
+  document.getElementById("totalTagsDisplay").innerHTML = output;
+}
+// function for displaying number of views once user hits the Numver of Views button
+function displayViews(numviews){
+  output = "<table><tr><td>" + "Total number of views: " + "</td><td>" + numviews + "</td>";
+  document.getElementById("numViews").innerHTML = output;
+}
+
+function displayErrors(numErrors){
+  output = "<table><tr><td>" + "Total number of errors: " + "</td><td>" + numErrors + "</td>";
+  document.getElementById("numErrors").innerHTML = output;
+}
+
+function displayUniqueVisitorCount(uniquevisitors){
+  output = "<table><tr><td>" + "Number of unique vistors: " + "</td><td>" + uniquevisitors.length + "</td>";
+  document.getElementById("unique_visitor_count").innerHTML = output;
+}
+
 function displayPageAccessCount(sorted_pages){
   conceptlist = "<table>";
   for(i=0;i<sorted_pages.length;i++){
@@ -615,16 +646,24 @@ function displayPageAccessCount(sorted_pages){
   document.getElementById("page_access_count").innerHTML = conceptlist;
 }
 
-/*
-  display functions have been refactored to one function, displayStats. 
-  params:
-  tag - the html tag that holds the string (parameter that gets passed in needs to be in quotes)
-  printed text - the text you want to display (also passed in as quotes)
-  result - calculation that you want to display
-*/
-function displayStats(tag, printedText, result)
-{
-  output = "<table><tr><td>" + printedText + "</td><td>" + result + "</td>";
-  document.getElementById(tag).innerHTML = output;
+function displayAveragePagePerVisit(average){
+  average = average.toFixed(1);
+  output = "<table><tr><td>" + "Average number of pages per visit: " + "</td><td>" + average + "</td>";
+  document.getElementById("average_pages_per_visit").innerHTML = output;
 }
 
+function displayMaximumPagesPerVisit(max){
+  output = "<table><tr><td>" + "Maxmimum Pages Per Visit: " + "</td><td>" + max + "</td>";
+  document.getElementById("maximum_pages_per_visit").innerHTML = output;
+}
+
+function displayVisits(visit_count){
+  output = "<table><tr><td>" + "Visit Count: " + "</td><td>" + visit_count + "</td>";
+  document.getElementById("count_visits").innerHTML = output;
+}
+
+function displayBounce(bounce_rate){
+  bounce_rate = bounce_rate.toFixed(1);
+  output = "<table><tr><td>" + "Bounce Rate: " + "</td><td>" + bounce_rate + "</td>";
+  document.getElementById("bouncedisplay").innerHTML = output;
+}
