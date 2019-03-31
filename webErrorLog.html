@@ -18,20 +18,19 @@
         * and process the text without it adding onto old data.
         */
         if (document.getElementById("totalPageErrors").checked == true){
-          result = removeBracket(separate_text);  
+          result = removeBracket(separate_text);
           result = getVisitorsWithDuplicates(separate_text);
           numErrors = result.length;
-          displayStats("numErrors", "Total number of errors: ", numErrors); 
+          displayErrors(numErrors);
         }
         if (document.getElementById("uniqueVisitorCount").checked == true){
           result = removeBracket(separate_text);
           result = getUniqueVisitors(separate_text);
-          displayStats("unique_visitor_count", "Number of unique vistors: ", result); 
+          displayUniqueVisitorCount(result);
         }
         if (document.getElementById("uniquePageErrors").checked == true){ 
           result = removeBracket(separate_text);
-          var num = getUniquePageErrorlog(result); 
-          displayStats("unique_pages", "Unique page errors: ", num); 
+          getUniquePageErrorlog(result); 
         }
       }
 

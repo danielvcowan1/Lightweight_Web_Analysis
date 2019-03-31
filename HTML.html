@@ -15,17 +15,16 @@
 
       if (document.getElementById("totalTags").checked == true){
         let totalTags = getListOfTags(textclean);
-        displayStats("totalTagsDisplay", "Total number of tags: ", totalTags.length); 
+        displayTotalTags(totalTags.length);
       }
       if (document.getElementById("startAndEndTags").checked == true){
         let startsAndEnds = getStartsAndEnds(textclean);
-        displayStats("startDisplay", "Total number of starts: ", startsAndEnds[0]); 
-        displayStats("endDisplay", "Total number of ends: " , startsAndEnds[1]); 
+        displayStartsAndEnds(startsAndEnds);
 
       }
       if(document.getElementById("tagsWithoutEnd").checked == true){
         let tagsWithoutEnd = getTotalTagsWithoutEnd(textclean);
-        displayStats("tagsWithoutEndDisplay", "Tags without ends: ", tagsWithoutEnd); 
+        displayTotalTagsWithoutEnd(tagsWithoutEnd);
       }
 		}
 	</script>
