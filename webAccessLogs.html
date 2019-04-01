@@ -15,35 +15,40 @@
         */
         if (document.getElementById("totalPageViews").checked == true){
           result = countViews(textinput);
-          displayViews(result);
+          displayStats("numViews",  "Total number of views: ", result);
+          //get_timestamps(textinput); 
         }
         if (document.getElementById("uniqueVisitorCount").checked == true){
           result = getUniqueVisitors(separate_text);
-          displayUniqueVisitorCount(result);
+          displayStats("unique_visitor_count", "Number of unique vistors: ", result);
         }
         if (document.getElementById("pageAccessCount").checked == true){
           result = pageAccessCount(separate_text);
           displayPageAccessCount(result);
         }
         if (document.getElementById("averagePagePerVisit").checked == true){
-          visit_text = textinput.split(" "); //have to split by space for this one
-          result = averagePagePerVisit(separate_text);
-          displayAveragePagePerVisit(result);
+          visit_text = textinput.split("\n"); //have to split line by line for this
+          result = averagePagePerVisit(separate_text, visit_text);
+          displayStats("average_pages_per_visit", "Average number of pages per visit: ", result);
         }
         if (document.getElementById("maximumPagesPerVisit").checked == true){
-          result = maximumPagesPerVisit(separate_text);
-          displayMaximumPagesPerVisit(result);
+          visit_text = textinput.split("\n"); //have to split line by line for this
+          result = maximumPagesPerVisit(visit_text);
+          displayStats("maximum_pages_per_visit", "Maxmimum Pages Per Visit: ", result);
         }
         if (document.getElementById("countVisits").checked == true){
-          result = countVisits(separate_text);
-          displayVisits(result);
+          visit_text = textinput.split("\n"); //have to split line by line for this
+          result = countVisits(visit_text);
+          displayStats("count_visits", "Visit Count: ", result);
         }
-        if (document.getElementById("uniquePageView").checked == true){
-          getUniquePageViews(separate_text);
+        if (document.getElementById("uniquePageView").checked == true){ 
+          result = getUniquePageViews(textinput); 
+          displayStats("unique_pages", "Number of unique pages: ", result); 
         }
-        if (document.getElementById("bounce").checked == true){
-          result = getBounce(separate_text);
-          displayBounce(result);
+        if (document.getElementById("bounce").checked == true){ 
+          visit_text = textinput.split("\n"); //have to split line by line for this
+          result = getBounce(visit_text);
+          displayStats("bounce",  "Bounce Rate: ", result);  
         }
       }
     </script>

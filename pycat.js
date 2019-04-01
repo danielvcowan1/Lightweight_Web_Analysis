@@ -255,23 +255,6 @@ function displayDataLists(wordlistsymbols)
   		document.getElementById("dlists").innerHTML = output;
 }
 
-function removeCommonAdjectives(textclean)
-{
-  textclean = removeWords(textclean, adj_words);
-  return textclean;
-}
-
-function removeCommonAdverbs(textclean)
-{
-  textclean = removeWords(textclean, adv_words);
-  return textclean;
-}
-
-function removeCommonVerbs(textclean)
-{
-  textclean = removeWords(textclean, verb_words);
-  return textclean;
-}
 
 // function for adding number of views
 function countViews(weblog){
@@ -283,33 +266,9 @@ function countViews(weblog){
 //function that will return unique IP addresses in uniquevisitors[]. Duplicates will be excluded.
 function getUniqueVisitors(weblog){
     visitors = getVisitorsWithDuplicates(weblog);
-    visitors.sort();
-    uniquevisitors = [];
-    var old = "";
-    var count = 0;
-    for (var i = 0;i<visitors.length;i++){
-      if (visitors[i]) {
-        if (visitors[i] != old) {
-          if ((old.length>0)
-            && (old.charCodeAt(0) != 13)
-            && (old != "")) {
-              uniquevisitors.push(old);
-          }
-          count = 1;
-        }
-        else {
-          count = count + 1;
-        }
-        old = visitors[i];
+    var no_dups = [...new Set(visitors)];
 
-      }
-      else {
-      }
-      if (i == visitors.length - 1){
-        uniquevisitors.push(visitors[i]);
-      }
-    }
-    return uniquevisitors;
+    return no_dups.length
 }
 
 
@@ -405,6 +364,8 @@ function averagePagePerVisit(weblog){
 
 /* maximumPagesPerVisit() will return the max number of pages that were visited in a single visit.
     Uses the same process as countVisits()
+
+    Iyanna - come back to this once you've added function to scan the page and grab all the IP addresses and timestamps
 */
 
 function maximumPagesPerVisit(weblog){
@@ -511,16 +472,16 @@ function getUniquePageViews(weblog)
 {
 
   let website_arr = getPages(weblog);
-
- /*
+ /*;
  * i split the data up by double commas in order to get the website.
  * the website of each request starts in the third position of the array,
  * and then every 6 spots afterwards, hence the i = 3 and i = i +6
  */
 
+
   let no_duplicates = [...new Set(website_arr)]; //technique to get rid of duplicates in an array
-  output = "<table><tr><td>" + "Number of unique pages viewed: " + "</td><td>" + no_duplicates.length + "</td>";
-  document.getElementById("unique_pages").innerHTML = output;
+  //alert(no_duplicates);
+  return no_duplicates.length;
 }
 
 var customSort = function (a, b) {
@@ -617,10 +578,12 @@ function getDecisionPoints(graph){
   return decisionpoints;
 }
 
+
 /*
-  DISPLAY FUNCTIONS BELOW HERE
-  ||||||||||||||||||||||||||||
-  vvvvvvvvvvvvvvvvvvvvvvvvvvvv
+  this is a helper function that gets the IP address and timestamp of each visit, and
+  organizes it into an object structure
+  it looks like this:
+  ip_array = {"111.11.1111: [12:30, 1:20, 4:20], "222.22.2222: [12:15, 2:30, 3:12]}  ETC"
 */
 function displayEndingPoints(endingpoints){
   let sorted = endingpoints.sort();
@@ -711,37 +674,32 @@ function displayDecisionPoints(decisionPoints){
   conceptlist += "</table>";
   document.getElementById("decisionPointsDisplay").innerHTML = conceptlist;
 }
+function get_timestamps(weblog)
+{
+  var ip_catalog = {}
+  for (let i = 0; i < weblog.length; i++)
+  {
+    let split_entry = weblog[i].split(" ");
+    var ip_addr = split_entry[0];
+    var timestamp = split_entry[3];
 
-function displayStartsAndEnds(startsAndEnds){
-  output = "<table><tr><td>" + "Total number of starts: " + "</td><td>" + startsAndEnds[0] + "</td>";
-  output = output + "<table><tr><td>" + "Total number of ends: " + "</td><td>" + startsAndEnds[1] + "</td>";
-  document.getElementById("startsAndEndsDisplay").innerHTML = output;
-}
+    if (ip_addr in ip_catalog)
+    {
+      ip_catalog[ip_addr].push(timestamp);
+    }
+    else
+    {
+      ip_catalog[ip_addr] = [timestamp];
+    }
+  }
 
-function displayTotalTagsWithoutEnd(tagsWithoutEnd){
-  output = "<table><tr><td>" + "Tags without ends: " + "</td><td>" + tagsWithoutEnd + "</td>";
-  document.getElementById("tagsWithoutEndDisplay").innerHTML = output;
+  document.write(ip_catalog);
 }
-
-function displayTotalTags(totalTags){
-  output = "<table><tr><td>" + "Total number of tags: " + "</td><td>" + totalTags + "</td>";
-  document.getElementById("totalTagsDisplay").innerHTML = output;
-}
-// function for displaying number of views once user hits the Numver of Views button
-function displayViews(numviews){
-  output = "<table><tr><td>" + "Total number of views: " + "</td><td>" + numviews + "</td>";
-  document.getElementById("numViews").innerHTML = output;
-}
-
-function displayErrors(numErrors){
-  output = "<table><tr><td>" + "Total number of errors: " + "</td><td>" + numErrors + "</td>";
-  document.getElementById("numErrors").innerHTML = output;
-}
-
-function displayUniqueVisitorCount(uniquevisitors){
-  output = "<table><tr><td>" + "Number of unique vistors: " + "</td><td>" + uniquevisitors.length + "</td>";
-  document.getElementById("unique_visitor_count").innerHTML = output;
-}
+/*
+  DISPLAY FUNCTIONS BELOW HERE
+  ||||||||||||||||||||||||||||
+  vvvvvvvvvvvvvvvvvvvvvvvvvvvv
+*/
 
 function displayPageAccessCount(sorted_pages){
   conceptlist = "<table>";
@@ -757,24 +715,15 @@ function displayPageAccessCount(sorted_pages){
   document.getElementById("page_access_count").innerHTML = conceptlist;
 }
 
-function displayAveragePagePerVisit(average){
-  average = average.toFixed(1);
-  output = "<table><tr><td>" + "Average number of pages per visit: " + "</td><td>" + average + "</td>";
-  document.getElementById("average_pages_per_visit").innerHTML = output;
-}
-
-function displayMaximumPagesPerVisit(max){
-  output = "<table><tr><td>" + "Maxmimum Pages Per Visit: " + "</td><td>" + max + "</td>";
-  document.getElementById("maximum_pages_per_visit").innerHTML = output;
-}
-
-function displayVisits(visit_count){
-  output = "<table><tr><td>" + "Visit Count: " + "</td><td>" + visit_count + "</td>";
-  document.getElementById("count_visits").innerHTML = output;
-}
-
-function displayBounce(bounce_rate){
-  bounce_rate = bounce_rate.toFixed(1);
-  output = "<table><tr><td>" + "Bounce Rate: " + "</td><td>" + bounce_rate + "</td>";
-  document.getElementById("bouncedisplay").innerHTML = output;
+/*
+  display functions have been refactored to one function, displayStats.
+  params:
+  tag - the html tag that holds the string (parameter that gets passed in needs to be in quotes)
+  printed text - the text you want to display (also passed in as quotes)
+  result - calculation that you want to display
+*/
+function displayStats(tag, printedText, result)
+{
+  output = "<table><tr><td>" + printedText + "</td><td>" + result + "</td>";
+  document.getElementById(tag).innerHTML = output;
 }
