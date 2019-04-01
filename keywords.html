@@ -51,13 +51,13 @@ Michael Bigrigg
 				textclean = removenoise(textclean);
 		}
 		if (document.getElementById("commonAdjCheck").checked == true){ // ensures check box is checked
-				textclean = removeCommonAdjectives(textclean);
+				textclean = removeWords(textclean, adj_list)
 		}
 		if (document.getElementById("commonAdvCheck").checked == true){ // ensures check box is checked
-				textclean = removeCommonAdverbs(textclean);
+				textclean = removeWords(textclean, adv_list)
 		}
 		if (document.getElementById("commonVerbCheck").checked == true){ // ensures check box is checked
-				textclean = removeCommonVerbs(textclean);
+				textclean = removeWords(textclean, verb_list)
 		}
 
 		textclean = subcompound(textclean);

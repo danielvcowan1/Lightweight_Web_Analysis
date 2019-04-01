@@ -255,23 +255,6 @@ function displayDataLists(wordlistsymbols)
   		document.getElementById("dlists").innerHTML = output;
 }
 
-function removeCommonAdjectives(textclean)
-{
-  textclean = removeWords(textclean, adj_words);
-  return textclean;
-}
-
-function removeCommonAdverbs(textclean)
-{
-  textclean = removeWords(textclean, adv_words);
-  return textclean;
-}
-
-function removeCommonVerbs(textclean)
-{
-  textclean = removeWords(textclean, verb_words);
-  return textclean;
-}
 
 // function for adding number of views
 function countViews(weblog){
@@ -283,33 +266,9 @@ function countViews(weblog){
 //function that will return unique IP addresses in uniquevisitors[]. Duplicates will be excluded.
 function getUniqueVisitors(weblog){
     visitors = getVisitorsWithDuplicates(weblog);
-    visitors.sort();
-    uniquevisitors = [];
-    var old = "";
-    var count = 0;
-    for (var i = 0;i<visitors.length;i++){
-      if (visitors[i]) {
-        if (visitors[i] != old) {
-          if ((old.length>0)
-            && (old.charCodeAt(0) != 13)
-            && (old != "")) {
-              uniquevisitors.push(old);
-          }
-          count = 1;
-        }
-        else {
-          count = count + 1;
-        }
-        old = visitors[i];
+    var no_dups = [...new Set(visitors)];
 
-      }
-      else {
-      }
-      if (i == visitors.length - 1){
-        uniquevisitors.push(visitors[i]);
-      }
-    }
-    return uniquevisitors;
+    return no_dups.length
 }
 
 
@@ -394,6 +353,8 @@ function averagePagePerVisit(weblog){
 
 /* maximumPagesPerVisit() will return the max number of pages that were visited in a single visit.
     Uses the same process as countVisits()
+
+    Iyanna - come back to this once you've added function to scan the page and grab all the IP addresses and timestamps
 */
 
 function maximumPagesPerVisit(weblog){
@@ -500,16 +461,16 @@ function getUniquePageViews(weblog)
 {
 
   let website_arr = getPages(weblog);
-
- /*
+ /*;
  * i split the data up by double commas in order to get the website.
  * the website of each request starts in the third position of the array,
  * and then every 6 spots afterwards, hence the i = 3 and i = i +6
  */
 
+
   let no_duplicates = [...new Set(website_arr)]; //technique to get rid of duplicates in an array
-  output = "<table><tr><td>" + "Number of unique pages viewed: " + "</td><td>" + no_duplicates.length + "</td>";
-  document.getElementById("unique_pages").innerHTML = output;
+  //alert(no_duplicates);
+  return no_duplicates.length;
 }
 
 var customSort = function (a, b) {
@@ -595,6 +556,34 @@ function createGraph(path){
 
 }
 
+
+/*
+  this is a helper function that gets the IP address and timestamp of each visit, and 
+  organizes it into an object structure 
+  it looks like this:
+  ip_array = {"111.11.1111: [12:30, 1:20, 4:20], "222.22.2222: [12:15, 2:30, 3:12]}  ETC"
+*/
+function get_timestamps(weblog)
+{
+  var ip_catalog = {}
+  for (let i = 0; i < weblog.length; i++)
+  {
+    let split_entry = weblog[i].split(" ");
+    var ip_addr = split_entry[0]; 
+    var timestamp = split_entry[3];
+
+    if (ip_addr in ip_catalog)
+    {
+      ip_catalog[ip_addr].push(timestamp);
+    } 
+    else
+    {
+      ip_catalog[ip_addr] = [timestamp];
+    }
+  }
+
+  document.write(ip_catalog);
+}
 /*
   DISPLAY FUNCTIONS BELOW HERE
   ||||||||||||||||||||||||||||
