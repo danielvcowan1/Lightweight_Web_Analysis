@@ -7,11 +7,16 @@
 			var textinput;
 
 			textinput = document.getElementById("myTextarea").value;
+			textremovedinput = document.getElementById("removedText").value;
 
 			textclean = prepare(textinput);
 			textclean = lower(textclean);
+			textcleanremoved = lower(textremovedinput);
 
 			wordlist = textclean.split(" ");
+			textcleanremoved = textcleanremoved.split("\n"); // a wordlist of words to be removedText
+			textclean = removeWords(textclean, textcleanremoved);
+			
 			wordlist2=[];
 
 	    var i = 0;
