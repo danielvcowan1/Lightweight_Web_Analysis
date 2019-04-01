@@ -579,12 +579,6 @@ function getDecisionPoints(graph){
 }
 
 
-/*
-  this is a helper function that gets the IP address and timestamp of each visit, and
-  organizes it into an object structure
-  it looks like this:
-  ip_array = {"111.11.1111: [12:30, 1:20, 4:20], "222.22.2222: [12:15, 2:30, 3:12]}  ETC"
-*/
 function displayEndingPoints(endingpoints){
   let sorted = endingpoints.sort();
   console.log(sorted);
@@ -674,6 +668,14 @@ function displayDecisionPoints(decisionPoints){
   conceptlist += "</table>";
   document.getElementById("decisionPointsDisplay").innerHTML = conceptlist;
 }
+
+/*
+  this is a helper function that gets the IP address and timestamp of each visit, and
+  organizes it into an object structure
+  it looks like this:
+  ip_array = {"111.11.1111: [12:30, 1:20, 4:20], "222.22.2222: [12:15, 2:30, 3:12]}  ETC"
+*/
+
 function get_timestamps(weblog)
 {
   var ip_catalog = {}
