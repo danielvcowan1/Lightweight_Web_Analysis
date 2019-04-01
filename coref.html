@@ -7,26 +7,58 @@
 			var textinput;
 
 			textinput = document.getElementById("myTextarea").value;
-			textremovedinput = document.getElementById("removedText").value;
 
 			textclean = prepare(textinput);
-			textcleanremoved = prepare(textremovedinput);
 			textclean = lower(textclean);
-			textcleanremoved = lower(textcleanremoved);
-
-			textcleanremoved = textcleanremoved.split(" "); // a wordlist of words to be removedText
-
-			textclean = removeWords(textclean, textcleanremoved);
 
 			wordlist = textclean.split(" ");
-			wordlist.sort();
+			wordlist2=[];
+
+	    var i = 0;
+	    var winsize = 4;
+		  var end = winsize-1;
+		  var concp=[];
+		  for(i=0;i<wordlist.length-winsize;i++){
+			if((wordlist[i].length>0)){
+				for(var end=1;end<winsize;end++){
+					if(wordlist[i+end].length>0)concp.push(wordlist[i]+" "+wordlist[i+end]);
+				}
+			}
+
+		  }
+		concp.sort();
+		  var i = 0;
+	      var count = 1;
+	      var old = "";
+		  var sorted = [];
+
+	      for (i=0;i<concp.length;i++) {
+		if (concp[i].length>0) {
+		  if (concp[i] != old) {
+		    if ((old.length>0) && (old.charCodeAt(0) != 13) && (old != "")) {
+				sorted.push(count.toString()+" "+old);
+	            }
+		    count = 1;
+		  }
+	          else {
+		    count = count + 1;
+		  }
+		old = concp[i];
 		}
+		else {
+		}
+	      }
+		  sorted.sort();
+		  sorted.reverse();
+
+			displayCoref(sorted);
+		 }
 	</script>
 </head>
 <body>
 	<H2>SIMPLE COREFERENCE TOOL</H2>
 	<table>
-	<tr><td>
+	<tr><td style="vertical-align:top;">
     	<P>Copy and paste your data into the text box<br/>
     	and press <i>process text</i></P>
     	<textarea id="myTextarea" rows="20" cols="40"></textarea>
@@ -41,7 +73,9 @@
 			<P>Enter the concepts to be removed into the text<br/>
 			box below</P>
 			<textarea id="removedText" rows="20" cols="40"></textarea>
-		</td></tr>
+		</td><td style="vertical-align:top;">
+			<p id="corefDisplay">
+		</td>
 	</table>
 </body>
 </html>

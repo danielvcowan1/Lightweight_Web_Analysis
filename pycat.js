@@ -729,3 +729,13 @@ function displayStats(tag, printedText, result)
   output = "<table><tr><td>" + printedText + "</td><td>" + result + "</td>";
   document.getElementById(tag).innerHTML = output;
 }
+
+function displayCoref(sorted){
+  output = "<table>"
+  for (i=0;i<sorted.length;i++) {
+    printable = sorted[i].split(" ");
+    output += "<tr><td>"+printable[0]+"</td><td>"+printable[1]+" "+printable[2]+"</td></tr>";
+  }
+  output +="</table>"
+  document.getElementById("corefDisplay").innerHTML = output;
+}
