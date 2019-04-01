@@ -2,6 +2,7 @@
 <html lang='en'>
 <head>
 	<script type="text/javascript" src="pycat.js"></script>
+	<script type="text/javascript" src="important_tags.js"></script>
 	<script type="text/javascript">
 		function displayResult(){
 			var textinput;
@@ -27,6 +28,16 @@
         let tagsWithoutEnd = getTotalTagsWithoutEnd(textclean);
         displayStats("tagsWithoutEndDisplay", "Tags without ends: ", tagsWithoutEnd); 
       }
+      if(document.getElementById("importantTag").checked == true){
+        let importantTags = getImportantTags(textclean, important_tags);
+        displayStats("importantTagDisplay", "Important tags: ", importantTags); 
+      }
+      if(document.getElementById("unimportantTag").checked == true){
+        let totalTags = getListOfTags(textclean).length;
+        let importantTags = getImportantTags(textclean, important_tags);
+        let unimportantTags = totalTags - importantTags;
+        displayStats("unimportantTagDisplay", "Unimportant tags: ", unimportantTags); 
+      }
 		}
 	</script>
 </head>
@@ -47,10 +58,17 @@
       <br>
       <input type="checkbox" id="tagsWithoutEnd">Tags Without End </input>
       <br>
+      <input type="checkbox" id="importantTag">Important Tags </input>
+      <br>
+      <input type="checkbox" id="unimportantTag">Unimportant Tags </input>
+      <br>
     </td><td style="vertical-align:top;">
       <p id="totalTagsDisplay">
-      <p id="startsAndEndsDisplay">
+      <p id="startDisplay">
+      <p id="endDisplay">
       <p id="tagsWithoutEndDisplay">
+      <p id="importantTagDisplay">
+      <p id="unimportantTagDisplay">
     </td>
 	</table>
 </body>
