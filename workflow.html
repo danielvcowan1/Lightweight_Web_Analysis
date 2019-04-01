@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <script type="text/javascript" src="pycat.js"></script>
+    <script type="text/javascript" src="graph.js"></script>
+    <script type="text/javascript">
+
+      function displayResult(){
+        	textinput = document.getElementById("myTextarea").value;
+
+          weblog = textinput.split("\n");
+
+          //We are going to use a graph data structure to solve most of these problems
+
+          let workflow = weblog.sort();
+          let files = getFiles(weblog);
+          let uniquefiles = [...new Set(files)];
+          let graph = new Graph(uniquefiles.length);
+
+          //adds all files accessed as vertexes in the graph
+
+          for(let i = 0; i<uniquefiles.length; i++){
+              graph.addVertex(uniquefiles[i]);
+          }
+
+          //the following code will apply edges
+
+          let source = "";
+          let dest = "";
+          let newip = "";
+          let oldip = "";
+          let startingpoints = [];
+          let endingpoints = [];
+          for(let i = 0; i<workflow.length; i++){
+            let line = workflow[i].split(" ");
+            let newip = line[0];
+            if (line[6] != "/"){
+              if(newip==oldip){
+                if(line[5] == "\"GET" && line.length >= 11){
+                  dest = line[6];
+                  graph.addEdge(source, dest);
+                  source = dest;
+                }
+              }
+              else{
+                startingpoints.push(line[6]);
+                if (source != ""){
+                  endingpoints.push(source);
+                }
+                if(line[5] == "\"GET" && line.length >= 11){
+                    source = line[6];
+                  }
+                }
+            oldip=newip;
+            }
+          }
+        console.log(endingpoints);
+        if (document.getElementById("startingPoints").checked == true){
+          displayStartingPoints(startingpoints);
+        }
+        if (document.getElementById("endingPoints").checked == true){
+          displayEndingPoints(endingpoints);
+        }
+        if (document.getElementById("decisionPoints").checked == true){
+          let decisionPoints = getDecisionPoints(graph);
+          displayDecisionPoints(decisionPoints);
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <H2>WORKFLOW TOOL</H2>
+    <table>
+      <tr><td style="vertical-align:top;">
+        <P>Copy and paste your data into the text box<br/>
+        and press <i>process text</i></P>
+        <textarea id="myTextarea" rows="20" cols="40"></textarea>
+        <br>
+        <input type="checkbox" id="startingPoints">Starting Points Count </input>
+        <br>
+        <input type="checkbox" id="endingPoints">Ending Points Count </input>
+        <br>
+        <input type="checkbox" id="decisionPoints">Decision Points </input>
+        <br>
+        <button type="button"
+          onclick="displayResult()">Process Text
+        </button>
+      </td><td style="vertical-align:top;">
+        <p id="startingPointsDisplay">
+        <p id="endingPointsDisplay">
+        <p id="decisionPointsDisplay">
+      </td>
+    </table>
+  </body>
+</html>
