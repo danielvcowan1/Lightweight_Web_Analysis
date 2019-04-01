@@ -361,7 +361,7 @@ function averagePagePerVisit(weblog){
   pageCount = getPages(weblog);
   visits = countVisits(weblog);
   average = pages.length/visits;
-  return average;
+  return average.toFixed(2);
 }
 
 /* maximumPagesPerVisit() will return the max number of pages that were visited in a single visit.
@@ -474,6 +474,7 @@ function getUniquePageViews(weblog)
 {
 
   let website_arr = getPages(weblog);
+  console.log(website_arr);
  /*;
  * i split the data up by double commas in order to get the website.
  * the website of each request starts in the third position of the array,
