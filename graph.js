@@ -10,10 +10,7 @@ class Graph{
   }
 
   addEdge(sourceVertex, destVertex){
-    let current = this.adjacentList.get(sourceVertex);
-    if (!current.includes(destVertex)){
       this.adjacentList.get(sourceVertex).push(destVertex);
-    }
   }
 
 }

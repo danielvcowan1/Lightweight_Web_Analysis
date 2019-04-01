@@ -10,6 +10,8 @@ Michael Bigrigg
    A regular expression will be made to remove words in textclean[] for each entry in textcleanremoved[].
 */
 
+
+
 function removeWords(textclean, textcleanremoved){
   if (textcleanremoved == "" ) {
     return textclean;
@@ -486,7 +488,16 @@ function getUniquePageViews(weblog)
 
 var customSort = function (a, b) {
   return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));
+}
 
+var customIPSort = function (a, b) {
+  splita = a.split(" ");
+  splitb = b.split(" ");
+  ipa = splita[0];
+  ipb = splitb[0];
+  const num1 = Number(ipa.split(".").map((num) => (`000${num}`).slice(-3) ).join(""));
+  const num2 = Number(ipb.split(".").map((num) => (`000${num}`).slice(-3) ).join(""));
+  return num1 - num2;
 }
 
 function getBounce(weblog){
@@ -579,6 +590,88 @@ function getDecisionPoints(graph){
 }
 
 
+/*
+  this is a helper function that gets the IP address and timestamp of each visit, and
+  organizes it into an object structure
+  it looks like this:
+  ip_array = {"111.11.1111: [12:30, 1:20, 4:20], "222.22.2222: [12:15, 2:30, 3:12]}  ETC"
+*/
+
+function get_timestamps(weblog)
+{
+  var ip_catalog = {}
+  for (let i = 0; i < weblog.length; i++)
+  {
+    let split_entry = weblog[i].split(" ");
+    var ip_addr = split_entry[0];
+    var timestamp = split_entry[3];
+
+    if (ip_addr in ip_catalog)
+    {
+      ip_catalog[ip_addr].push(timestamp);
+    }
+    else
+    {
+      ip_catalog[ip_addr] = [timestamp];
+    }
+  }
+
+  document.write(ip_catalog);
+}
+
+function getCommonPaths(graph){
+  let commonpaths = [];
+  let keys = graph.adjacentList.keys();
+  for (let i of keys){
+    let values = graph.adjacentList.get(i);
+    values.sort();
+    let count = 1;
+    let newplace = "";
+    let oldplace = "";
+    for(let j = 0; j<values.length;j++){
+      newplace = values[j];
+      if (oldplace != newplace){
+        if (count >= 2){
+          commonpaths.push(count.toString() + " " + i + " " + "-->" + " " + oldplace);
+        }
+        oldplace=newplace
+        count = 1;
+      }
+      else{
+        count++;
+        oldplace = newplace;
+      }
+    }
+  }
+  commonpaths.sort(customSort);
+  commonpaths.reverse();
+  return commonpaths;
+}
+/*
+  DISPLAY FUNCTIONS BELOW HERE
+  ||||||||||||||||||||||||||||
+  vvvvvvvvvvvvvvvvvvvvvvvvvvvv
+*/
+
+function displayCommonPaths(commonpaths){
+  conceptlist = "Common Paths \n <table>";
+  for(i=0;i<commonpaths.length;i++){
+    printable = commonpaths[i].split(" ");
+    console.log(printable);
+    conceptlist += "<tr><td>"
+          +printable[0]
+          +"</td><td>"
+          +printable[1]
+          +"</td><td>"
+          +printable[2]
+          +"</td><td>"
+          +printable[3]
+          +"</td><td>";
+  }
+  conceptlist += "</table>";
+  document.getElementById("commonPathsDisplay").innerHTML = conceptlist;
+}
+
 function displayEndingPoints(endingpoints){
   let sorted = endingpoints.sort();
   console.log(sorted);
@@ -602,7 +695,7 @@ function displayEndingPoints(endingpoints){
     }
     oldpage = newpage;
   }
-
+  sorted_points.sort(customSort);
   sorted_points.reverse();
 
   conceptlist = "Ending Points \n <table>";
@@ -641,7 +734,7 @@ function displayStartingPoints(startingPoints){
     }
     oldpage = newpage;
   }
-
+  sorted_points.sort(customSort);
   sorted_points.reverse();
 
   conceptlist = "Starting Points \n <table>";
@@ -668,40 +761,6 @@ function displayDecisionPoints(decisionPoints){
   conceptlist += "</table>";
   document.getElementById("decisionPointsDisplay").innerHTML = conceptlist;
 }
-
-/*
-  this is a helper function that gets the IP address and timestamp of each visit, and
-  organizes it into an object structure
-  it looks like this:
-  ip_array = {"111.11.1111: [12:30, 1:20, 4:20], "222.22.2222: [12:15, 2:30, 3:12]}  ETC"
-*/
-
-function get_timestamps(weblog)
-{
-  var ip_catalog = {}
-  for (let i = 0; i < weblog.length; i++)
-  {
-    let split_entry = weblog[i].split(" ");
-    var ip_addr = split_entry[0];
-    var timestamp = split_entry[3];
-
-    if (ip_addr in ip_catalog)
-    {
-      ip_catalog[ip_addr].push(timestamp);
-    }
-    else
-    {
-      ip_catalog[ip_addr] = [timestamp];
-    }
-  }
-
-  document.write(ip_catalog);
-}
-/*
-  DISPLAY FUNCTIONS BELOW HERE
-  ||||||||||||||||||||||||||||
-  vvvvvvvvvvvvvvvvvvvvvvvvvvvv
-*/
 
 function displayPageAccessCount(sorted_pages){
   conceptlist = "<table>";

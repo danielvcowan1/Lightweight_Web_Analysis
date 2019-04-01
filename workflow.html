@@ -11,7 +11,8 @@
 
           //We are going to use a graph data structure to solve most of these problems
 
-          let workflow = weblog.sort();
+          let workflow = weblog.sort(customIPSort);
+          console.log(workflow);
           let files = getFiles(weblog);
           let uniquefiles = [...new Set(files)];
           let graph = new Graph(uniquefiles.length);
@@ -33,7 +34,6 @@
           for(let i = 0; i<workflow.length; i++){
             let line = workflow[i].split(" ");
             let newip = line[0];
-            if (line[6] != "/"){
               if(newip==oldip){
                 if(line[5] == "\"GET" && line.length >= 11){
                   dest = line[6];
@@ -42,18 +42,20 @@
                 }
               }
               else{
-                startingpoints.push(line[6]);
-                if (source != ""){
-                  endingpoints.push(source);
-                }
                 if(line[5] == "\"GET" && line.length >= 11){
+                    startingpoints.push(line[6]);
                     source = line[6];
+                    if (source != "" & dest != ""){
+                      endingpoints.push(dest);
+                      dest = source;
+                    }
                   }
                 }
+                if (workflow.length == i + 1){
+                  endingpoints.push(line[6]);
+                }
             oldip=newip;
-            }
           }
-        console.log(endingpoints);
         if (document.getElementById("startingPoints").checked == true){
           displayStartingPoints(startingpoints);
         }
@@ -63,6 +65,11 @@
         if (document.getElementById("decisionPoints").checked == true){
           let decisionPoints = getDecisionPoints(graph);
           displayDecisionPoints(decisionPoints);
+        }
+        if (document.getElementById("commonPaths").checked == true){
+          let commonPaths = getCommonPaths(graph);
+          displayCommonPaths(commonPaths);
+
         }
       }
     </script>
@@ -81,6 +88,8 @@
         <br>
         <input type="checkbox" id="decisionPoints">Decision Points </input>
         <br>
+        <input type="checkbox" id="commonPaths">Common Paths </input>
+        <br>
         <button type="button"
           onclick="displayResult()">Process Text
         </button>
@@ -88,6 +97,7 @@
         <p id="startingPointsDisplay">
         <p id="endingPointsDisplay">
         <p id="decisionPointsDisplay">
+        <p id="commonPathsDisplay">
       </td>
     </table>
   </body>
