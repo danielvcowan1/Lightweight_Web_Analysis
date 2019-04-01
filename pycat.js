@@ -533,7 +533,7 @@ function getTotalTagsWithoutEnd(parsed_html){
       x.push(tagList[i]);
     }
   }
-  return tagsMissingEnd;
+  return tagsMissingEnd.length;
 }
 
 function getListOfTags(parsed_html){
@@ -543,6 +543,17 @@ function getListOfTags(parsed_html){
     let subss = subs.split(" ");
     subss = subss[0];
     x.push(subss);
+  }
+  return x;
+}
+
+function getImportantTags(parsed_html, important_tags){
+  let tagList = getListOfTags(parsed_html);
+  let x = 0;
+  for (let i = 0;i< tagList.length; i++){
+    if (important_tags.includes(tagList[i])){
+      x++;
+    }
   }
   return x;
 }
