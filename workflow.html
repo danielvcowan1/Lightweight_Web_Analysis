@@ -57,10 +57,10 @@
             oldip=newip;
           }
         if (document.getElementById("startingPoints").checked == true){
-          displayStartingPoints(startingpoints);
+          displayStartOrEnds("start", startingpoints);
         }
         if (document.getElementById("endingPoints").checked == true){
-          displayEndingPoints(endingpoints);
+          displayStartOrEnds("end", endingpoints);
         }
         if (document.getElementById("decisionPoints").checked == true){
           let decisionPoints = getDecisionPoints(graph);
