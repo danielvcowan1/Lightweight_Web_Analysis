@@ -606,7 +606,7 @@ function getDecisionPoints(graph){
   this is a helper function that gets the IP address and timestamp of each visit, and
   organizes it into an object structure
   it looks like this:
-  ip_array = {"111.11.1111: [12:30, 1:20, 4:20], "222.22.2222: [12:15, 2:30, 3:12]}  ETC"
+  ip_array = {"111.11.1111: [12:30, 1:20, 4:20], "222.22.2222": [12:15, 2:30, 3:12]}  ETC
 */
 
 function get_timestamps(weblog)
@@ -684,48 +684,17 @@ function displayCommonPaths(commonpaths){
   document.getElementById("commonPathsDisplay").innerHTML = conceptlist;
 }
 
-function displayEndingPoints(endingpoints){
-  let sorted = endingpoints.sort();
-  console.log(sorted);
-  let sorted_points = [];
-  let newpage = "";
-  let oldpage = "";
-  let count = 1;
-  for (let i = 0; i < sorted.length; i++){
-    newpage = sorted[i];
-    if (newpage == oldpage){
-      count = count + 1;
-    }
-    else {
-      if (oldpage != ""){
-        sorted_points.push(count.toString() + " " + oldpage);
-        count = 1;
-      }
-    }
-    if (i + 1 == sorted.length){
-        sorted_points.push(count.toString() + " " + newpage);
-    }
-    oldpage = newpage;
-  }
-  sorted_points.sort(customSort);
-  sorted_points.reverse();
 
-  conceptlist = "Ending Points \n <table>";
-  for(i=0;i<sorted_points.length;i++){
-    printable = sorted_points[i].split(" ");
-    conceptlist += "<tr><td>"
-          +printable[0]
-          +"</td><td>"
-          +printable[1]
-          +"</td><td>";
-  }
-  conceptlist += "</table>";
-  document.getElementById("endingPointsDisplay").innerHTML = conceptlist;
-}
-
-
-function displayStartingPoints(startingPoints){
-  let sorted = startingPoints.sort();
+/*
+* one function that can display either the start or ends of the workflow graph 
+* how it works:
+* pass in the graph points and the type of info you want to display 
+* "start" will display starting points. 
+* "end" will display ending points. 
+*/ 
+function displayStartOrEnds(type, points)
+{
+  let sorted = points.sort(); 
   let sorted_points = [];
   let newpage = "";
   let oldpage = "";
@@ -749,7 +718,15 @@ function displayStartingPoints(startingPoints){
   sorted_points.sort(customSort);
   sorted_points.reverse();
 
-  conceptlist = "Starting Points \n <table>";
+  if (type == "start")
+  {
+    conceptlist = "Starting Points \n <table>";
+  }
+  else 
+  {
+    conceptlist = "Ending Points \n <table>";
+  }
+
   for(i=0;i<sorted_points.length;i++){
     printable = sorted_points[i].split(" ");
     conceptlist += "<tr><td>"
@@ -759,7 +736,15 @@ function displayStartingPoints(startingPoints){
           +"</td><td>";
   }
   conceptlist += "</table>";
-  document.getElementById("startingPointsDisplay").innerHTML = conceptlist;
+
+  if (type == "start")
+  {
+    document.getElementById("startingPointsDisplay").innerHTML = conceptlist;
+  }
+  else
+  {
+    document.getElementById("endingPointsDisplay").innerHTML = conceptlist;
+  }
 }
 
 function displayDecisionPoints(decisionPoints){
