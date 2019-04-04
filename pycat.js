@@ -86,14 +86,6 @@ function getDataLists(wordlistsymbols){
       x = "<td>" + wordlistsymbols[i] + "</td>";
       phonenumberslist.push(x);
     }
-    else if(wordlistsymbols[i].match(url)){
-      if (urlslist.length == 0){
-        label = "<td>URLs:</td>";
-        urlslist.push(label);
-      }
-      x = "<td>" + wordlistsymbols[i] + "</td>";
-      urlslist.push(x);
-    }
     else if(wordlistsymbols[i].match(email)){
       if (emailslist.length == 0){
         label = "<td>E-Mails:</td>";
@@ -101,6 +93,14 @@ function getDataLists(wordlistsymbols){
       }
       x = "<td>" + wordlistsymbols[i] + "</td>";
       emailslist.push(x);
+    }
+    else if(wordlistsymbols[i].match(url)){
+      if (urlslist.length == 0){
+        label = "<td>URLs:</td>";
+        urlslist.push(label);
+      }
+      x = "<td>" + wordlistsymbols[i] + "</td>";
+      urlslist.push(x);
     }
     else if(wordlistsymbols[i].match(ipaddress)){
       if (ipaddresslist.length == 0){
@@ -137,8 +137,8 @@ function getDataLists(wordlistsymbols){
       timeslist.push(x);
     }
     else if(wordlistsymbols[i].match(currency)){
-      if (currencylistslist.length == 0){
-        label = "<td>Times:</td>";
+      if (currencylist.length == 0){
+        label = "<td>Currencies:</td>";
         currencylist.push(label);
       }
       x = "<td>" + wordlistsymbols[i] + "</td>";
@@ -216,7 +216,7 @@ return textclean;
 
 function addSampleData()
 {
-  document.getElementById('myTextarea').value = 'Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.' +
+  document.getElementById('myTextarea').value = 'Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal. ' +
                      'Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battle-field of that war. '+
                      'We have come to dedicate a portion of that field, as a final resting place for those who here gave their lives that that nation might live. It is altogether fitting and proper that we should do this. '+
                      'But, in a larger sense, we can not dedicate -- we can not consecrate -- we can not hallow -- this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power '+

@@ -29,6 +29,7 @@ Michael Bigrigg
 		// value that holds string input by user
 		textinput = document.getElementById("myTextarea").value;
 		textremovedinput = document.getElementById("removedText").value;
+		let adj_list =
 		/*
 		prepare() - Replaces all newline characters with " ".
 		lower() - Transforms all chracters to to lower case.
@@ -51,13 +52,13 @@ Michael Bigrigg
 				textclean = removenoise(textclean);
 		}
 		if (document.getElementById("commonAdjCheck").checked == true){ // ensures check box is checked
-				textclean = removeWords(textclean, adj_list)
+				textclean = removeWords(textclean, adj_words)
 		}
 		if (document.getElementById("commonAdvCheck").checked == true){ // ensures check box is checked
-				textclean = removeWords(textclean, adv_list)
+				textclean = removeWords(textclean, adv_words)
 		}
 		if (document.getElementById("commonVerbCheck").checked == true){ // ensures check box is checked
-				textclean = removeWords(textclean, verb_list)
+				textclean = removeWords(textclean, verb_words)
 		}
 
 		textclean = subcompound(textclean);
@@ -71,11 +72,11 @@ Michael Bigrigg
 		* "old", so i just push a new last word onto the list to ensure that the
 		* last input from the text gets added to sorted[].
 		*/
-	 wordlist.push(" ");
-		var i = 0;
-		var count = 1;
-		var old = "";
-		var sorted = [];
+	  wordlist.push(" ");
+	  var i = 0;
+	  var count = 1;
+	  var old = "";
+	  var sorted = [];
 		// create concept list from word list
 		for (i=0;i<wordlist.length;i++) {
 			if (wordlist[i].length>0) {
