@@ -7,10 +7,8 @@
     uniquevisitors = [];
 
       function displayResult(){
-        	textinput = document.getElementById("myTextarea").value;
-
-          textclean = prepare(textinput);
-          separate_text = textclean.split(" ");
+        	textinput = document.getElementById("myTextarea").value;;
+          separate_text = textinput.split("\n");
         /*
         * I changed around some of the functionality of display result.
         * it starts a fresh count of total page views each time.
@@ -18,20 +16,20 @@
         * and process the text without it adding onto old data.
         */
       if (document.getElementById("totalPageErrors").checked == true){
-          result = removeBracket(separate_text);  
+          result = removeBracket(separate_text);
           result = getVisitorsWithDuplicates(separate_text);
           numErrors = result.length;
-          displayStats("numErrors", "Total number of errors: ", numErrors); 
+          displayStats("numErrors", "Total number of errors: ", numErrors);
         }
         if (document.getElementById("uniqueVisitorCount").checked == true){
           result = removeBracket(separate_text);
           result = getUniqueVisitors(separate_text);
-          displayStats("unique_visitor_count", "Number of unique vistors: ", result); 
+          displayStats("unique_visitor_count", "Number of unique vistors: ", result);
         }
-        if (document.getElementById("uniquePageErrors").checked == true){ 
+        if (document.getElementById("uniquePageErrors").checked == true){
           result = removeBracket(separate_text);
-          var num = getUniquePageErrorlog(result); 
-          displayStats("unique_pages", "Unique page errors: ", num); 
+          var num = getUniquePageErrorlog(result);
+          displayStats("unique_pages", "Unique page errors: ", num);
         }
       }
 
@@ -63,4 +61,3 @@
     </table>
   </body>
 </html>
-

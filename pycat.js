@@ -322,6 +322,15 @@ function pageAccessCount(weblog){
   return sorted_pages;
 }
 
+function getErrorPages(weblog){
+  pages = [];
+  for (let i = 0; i<weblog.length;i++){
+    let split_entry = weblog[i].split(" ");
+    pages.push(split_entry[12]);
+  }
+  return pages;
+}
+
 /*
    The function getPages() will return a list of all web addresses that were accessed, including Duplicates
    Takes a weblog that has been split at the spaces as a parameter
@@ -461,10 +470,12 @@ function countVisits(weblog){
 }
 
 function getUniquePageErrorlog(weblog){
-  var website_arr = getPages(weblog);
+  console.log(weblog);
+  var website_arr = getErrorPages(weblog);
+  console.log(website_arr);
   var no_duplicates = [...new Set(website_arr)];
-  output = "<table><tr><td>" + "Number of unique page errors: " + "</td><td>" + no_duplicates.length + "</td>";
-  document.getElementById("unique_pages").innerHTML = output;
+  console.log(no_duplicates);
+  return no_duplicates.length;
 }
 
 
@@ -686,15 +697,15 @@ function displayCommonPaths(commonpaths){
 
 
 /*
-* one function that can display either the start or ends of the workflow graph 
+* one function that can display either the start or ends of the workflow graph
 * how it works:
-* pass in the graph points and the type of info you want to display 
-* "start" will display starting points. 
-* "end" will display ending points. 
-*/ 
+* pass in the graph points and the type of info you want to display
+* "start" will display starting points.
+* "end" will display ending points.
+*/
 function displayStartOrEnds(type, points)
 {
-  let sorted = points.sort(); 
+  let sorted = points.sort();
   let sorted_points = [];
   let newpage = "";
   let oldpage = "";
@@ -722,7 +733,7 @@ function displayStartOrEnds(type, points)
   {
     conceptlist = "Starting Points \n <table>";
   }
-  else 
+  else
   {
     conceptlist = "Ending Points \n <table>";
   }
