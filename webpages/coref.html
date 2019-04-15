@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang='en'>
 <head>
-	<script type="text/javascript" src="pycat.js"></script>
+	<script type="text/javascript" src="../js files/pycat.js"></script>
 	<script type="text/javascript">
 		function displayResult(){
 			var textinput;
@@ -13,10 +13,9 @@
 			textclean = lower(textclean);
 			textcleanremoved = lower(textremovedinput);
 
-			wordlist = textclean.split(" ");
 			textcleanremoved = textcleanremoved.split("\n"); // a wordlist of words to be removedText
 			textclean = removeWords(textclean, textcleanremoved);
-
+			wordlist = textclean.split(" ");
 			wordlist2=[];
 
 	    var i = 0;
