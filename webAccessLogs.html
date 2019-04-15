@@ -48,7 +48,9 @@
         if (document.getElementById("bounce").checked == true){
           visit_text = textinput.split("\n"); //have to split line by line for this
           result = getBounce(visit_text);
-          displayStats("bouncedisplay",  "Bounce Rate: ", result);
+          var percentage = result * 100; 
+          var percentage_str = percentage + "%"; //converted bounce rate to a percentage 
+          displayStats("bouncedisplay",  "Bounce Rate: ", percentage_str);
         }
       }
     </script>

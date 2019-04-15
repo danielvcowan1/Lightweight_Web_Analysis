@@ -375,98 +375,85 @@ function averagePagePerVisit(weblog){
 
 /* maximumPagesPerVisit() will return the max number of pages that were visited in a single visit.
     Uses the same process as countVisits()
-
-    Iyanna - come back to this once you've added function to scan the page and grab all the IP addresses and timestamps
 */
 
 function maximumPagesPerVisit(weblog){
-  weblog.sort();
-  var pages = 0;
-  var maxpages = 0;
-  var ip = "";
-  var oldip = "";
-  var new_timestamp = "";
-  var old_timestamp = "";
-  var timestamp_difference = 0;
-  var minutes = 0;
-  var date = "";
-  var time = "";
+ var maxpages = 0;  
+ var ip_list = get_timestamps_per_ip(weblog); //get a list of the ip addresses and the timestamps for each visit (<30 min time span) 
 
-  for (var i = 0; i<weblog.length;i++){
-    line = weblog[i].split(" ");
-    ip = line[0];
-    if (ip == oldip && line.length >= 4){
-      pages++;
-      new_timestamp = line[3];
-      new_timestamp = new_timestamp.substring(1);
-      date = new_timestamp.substring(0, 11);
-      time = new_timestamp.substring(12, 20);
-      new_timestamp = new Date(date + " " + time);
-      timestamp_difference = old_timestamp - new_timestamp;
-      minutes = Math.floor(timestamp_difference / 60) % 60;
-      if (minutes > 30){
-        pages = 1;
-      }
+ for(var j = 0; j < ip_list.length; j++)
+ {
+    if (ip_list[j].length > maxpages)
+    {
+      maxpages = ip_list[j].length; 
     }
-    else {
-      pages = 1;
-    }
-    oldip = ip;
-    old_timestamp = new_timestamp
+ }
 
-    if (pages > maxpages){
-      maxpages = pages;
-    }
-  }
-  return maxpages;
+  return maxpages - 1; //we have to subtract one because the IP address is included as an element of the list, we dont count that as a timestamp. 
 }
 
 /* The function countVisits() will count the number of times that either a new ipaddress accesses the site or
    a past visitor return after a length of over 30 minutes.
-   */
 
-function countVisits(weblog){
-    weblog.sort();
-    var visits = 0;
+   I changed the behavior of the function a little. Now, it adds all the IP addresses along with all the
+   timestamps to a nested array. If the new timestamp is not >= 30 minutes above the last one, it is not 
+   added. 
+*/ 
+function get_timestamps_per_ip(weblog)
+{
+  weblog.sort();
     var ip = "";
-    var oldip = "";
-    var new_timestamp = "";
     var old_timestamp = "";
-    var timestamp_difference = 0;
+    var timestamp_dif = 0;
     var minutes = 0;
     var date = "";
     var time = "";
 
-    /* for loop explanation
 
-        the following code will loop through every entry in the sorted web access log. Each entry will be split by spaces.
-        The ipaddress will be extracted. If the ip has changed then the visit count will be raised on one. If it is the
-        same then we must compare the timestamps. The timestamp is extracted and it must be reformatted to perform
-        timestamp subtraction. If the amount of minutes is greater than 30, the visit count is increased by 1.
-    */
-
-    for (var i = 0; i<weblog.length;i++){
+    var timestamps = []; 
+    for (var i = 0; i < weblog.length; i++)
+    {
       line = weblog[i].split(" ");
       ip = line[0];
-      if (ip == oldip && line.length >= 4){
-        new_timestamp = line[3];
-        new_timestamp = new_timestamp.substring(1);
-        date = new_timestamp.substring(0, 11);
-        time = new_timestamp.substring(12, 20);
-        new_timestamp = new Date(date + " " + time);
-        timestamp_difference = old_timestamp - new_timestamp;
-        minutes = Math.floor(timestamp_difference / 60) % 60;
-        if (minutes > 30){
-          visits = visits + 1;
+      timestamp = line[3].replace(/[\[\]']+/g, ''); //take out brackets
+      date = timestamp.substring(0, 11);   //get date and time 
+      time = timestamp.substring(12, 20);
+      timestamp = new Date(date + " " + time);
+
+      if (timestamps.flat().includes(ip)) //check if IP is already in the list 
+      {
+        for (var j = 0; j < timestamps.length; j++) //scroll through all the IPs in the list to find the match 
+        {
+          if (timestamps[j][0] == ip)
+          {
+            old_timestamp = timestamps[j][timestamps[j].length-1]; 
+            timestamp_dif = timestamp - old_timestamp; 
+            minutes = timestamp_dif / 60000; // convert to minutes 
+            if (minutes > 30)         //since this IP address is already in the list, only add it to list if its a new visit (>30 min)
+            {
+              timestamps.push([ip, timestamp]); 
+            }
+            else 
+            {
+              timestamps[j].push(timestamp); 
+            }
+          }
         }
       }
-      else {
-        visits = visits + 1;
+      else 
+      {
+        timestamps.push([ip, timestamp]); //else push the new IP/timestamp combo pair to the array 
       }
-      oldip = ip;
-      old_timestamp = new_timestamp
     }
-    return visits;
+    //document.write(timestamps);
+    return timestamps; 
+}
+
+function countVisits(weblog){
+ 
+    var timestamps = get_timestamps_per_ip(weblog); 
+
+    return timestamps.length
 }
 
 function getUniquePageErrorlog(weblog){
@@ -512,29 +499,24 @@ var customIPSort = function (a, b) {
   return num1 - num2;
 }
 
-function getBounce(weblog){
-  num_visits = countVisits(weblog);
-  weblog.sort();
-  var ip = "";
-  var oldip = "";
-  var count = 0;
-  var one_visit_count = 0;
 
-  for (var i = 0;i<weblog.length;i++){
-    line = weblog[i].split(" ");
-    ip = line[0];
-    if (ip != oldip && count == 1){
-      one_visit_count = one_visit_count + 1;
-      count = 0;
+/*
+* the bounce rate now retrives the list of IP addresses/timestamps to figure out how many 
+* visitors only have one timestamp 
+*/ 
+function getBounce(weblog){
+  var num_visits = countVisits(weblog);
+  var one_visit_count = 0; 
+  var ip_list = get_timestamps_per_ip(weblog); 
+
+  for (var j = 0; j < ip_list.length; j++ )
+  {
+    if ((ip_list[j].length) - 1 == 1)
+    {
+      one_visit_count += 1; 
     }
-    else if(ip != oldip){
-      count = 0;
-    }
-    oldip = ip;
-    count = count + 1;
   }
-  console.log(one_visit_count);
-  console.log(num_visits);
+
   return one_visit_count/num_visits;
 }
 

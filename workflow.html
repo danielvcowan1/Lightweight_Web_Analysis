@@ -12,7 +12,7 @@
           //We are going to use a graph data structure to solve most of these problems
 
           let workflow = weblog.sort(customIPSort);
-          console.log(workflow);
+          //console.log(workflow);
           let files = getFiles(weblog);
           let uniquefiles = [...new Set(files)];
           let graph = new Graph(uniquefiles.length);
